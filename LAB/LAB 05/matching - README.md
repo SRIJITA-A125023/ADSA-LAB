@@ -19,6 +19,30 @@ The algorithm scans edges in the given order and includes an edge in the matchin
 - Shows the full matching state after each iteration.
 - Displays the final set of matched pairs.
 
+## Time Complexity
+
+Let:
+
+e = number of edges
+
+nLeft, nRight = number of nodes on each side
+
+The algorithm checks each edge once and each check is constant time:
+
+Time Complexity: O(e)
+
+## Space Complexity
+
+The program stores:
+
+Edge list: O(e)
+
+Match arrays for left and right partitions: O(nLeft + nRight)
+
+Total:
+
+Space Complexity: O(e + nLeft + nRight)
+
 ## How to Compile
 
 Use any C compiler. For example, with GCC:
