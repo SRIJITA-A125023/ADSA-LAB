@@ -52,6 +52,55 @@ When a constraint is violated:
 - If all constraints are satisfied at the current center, a feasible point is found.
 - If not found in `MAX_ITER` iterations, the algorithm stops.
 
+## Time Complexity
+
+Let:
+
+n = number of variables (= 2)
+
+m = number of constraints (= 4)
+
+T = number of iterations (MAX_ITER = 5000)
+
+### Per iteration
+
+Check all constraints: O(m)
+
+Matrix-vector multiplication for update: O(n²)
+
+Several vector operations: O(n)
+
+Since n = 2, these are constant-time operations.
+
+### Overall
+Time Complexity = O(T × (m + n²))
+
+
+With fixed small n, the runtime is dominated by:
+
+O(T × m)
+
+
+## Space Complexity
+
+The program stores:
+
+Matrix A: O(m × n)
+
+Matrix E: O(n²)
+
+Vectors center, b, g, Eg: O(n + m)
+
+### Total:
+
+Space Complexity = O(mn + n² + m + n)
+
+
+With n = 2, this is effectively O(m).
+
+Memory usage is small and fixed.
+
+
 ## Compilation
 
 Use GCC (links math library):
