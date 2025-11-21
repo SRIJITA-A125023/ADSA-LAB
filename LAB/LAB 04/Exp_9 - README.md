@@ -19,7 +19,49 @@ You can enter any text and pattern, choose an algorithm, and the program will pr
 
 ---
 
-## How to Compile
+## Algorithm Overview
+KMP
 
+Preprocesses pattern to create the LPS array
+
+Time complexity: O(n + m)
+
+Avoids rechecking characters after mismatches
+
+Rabin-Karp
+
+Uses rolling hash to compare pattern with text windows
+
+Efficient for large texts or multiple pattern matches
+
+Time complexity:
+
+Best: O(n + m)
+
+Worst: O(nm) due to hash collisions
+
+---
+
+## Example
+
+Input
+
+Enter the text: ABABDABACDABABCABAB
+Enter the pattern to search: ABABCABAB
+
+Choose Algorithm:
+1. Knuth-Morris-Pratt (KMP)
+2. Rabin-Karp (Fingerprinting)
+Enter choice: 1
+
+
+Output
+
+--- Result ---
+Pattern found at index 10
+
+--- 
+
+## How to Compile 
 ```bash
 gcc pattern_matching.c -o pattern_matching
