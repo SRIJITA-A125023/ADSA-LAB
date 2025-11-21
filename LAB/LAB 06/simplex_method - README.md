@@ -27,6 +27,42 @@ This program solves linear programming problems using the Simplex method. It wor
    - Prints intermediate tableaus
    - Outputs the final solution
 
+## Time Complexity
+
+Let:
+
+m = number of constraints
+
+n = number of variables + slack/surplus variables
+
+### Per pivot:
+
+Finding entering variable: O(n)
+
+Finding leaving variable: O(m)
+
+Row operations: O(m × n)
+
+### Total:
+
+If the algorithm performs k pivots:
+
+Time Complexity = O(k × m × n)
+
+
+In practice, k is usually moderate, but in worst-case theoretical scenarios Simplex can take exponential time.
+
+## Space Complexity
+
+The tableau size is:
+
+(m + 1) rows × (n + 1) columns
+
+
+So memory usage is:
+
+Space Complexity = O(m × n)
+
 ## Compilation
 
 Use any C compiler. For GCC:
