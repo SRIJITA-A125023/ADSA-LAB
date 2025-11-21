@@ -47,6 +47,49 @@ For each outer iteration:
 
 After all iterations, the program prints the approximate optimal solution and objective value.
 
+## Time Complexity
+
+Let:
+
+n = number of variables
+
+m = number of constraints
+
+T = number of outer iterations (here: 20)
+
+K = number of inner gradient-descent iterations (MAX_ITER = 20000)
+
+Per inner iteration
+
+Gradient computation: O(n)
+
+Matrix-vector multiply (A x): O(mn)
+
+Projection step: O(mn)
+
+Total per inner loop: O(mn)
+
+### Full algorithm
+Time = O(T × K × m × n)
+
+
+Given defaults (T = 20, K = 20000, m, n ≤ 20), the run is computationally light for small problems but scales poorly.
+
+## Space Complexity
+
+The program stores:
+
+Matrix A: O(mn)
+
+Vectors x, c, b, grad, Ax: O(n + m)
+
+Total:
+
+Space = O(mn + n + m)
+
+
+Since dimensions are fixed at small maximum sizes (20 × 20), memory usage is small.
+
 ## Compilation
 
 Compile using GCC with math library:
@@ -56,3 +99,5 @@ gcc interior_point.c -o interior_point -lm
 
 
 f(x) = cᵀx − μ Σ log(xᵢ)
+
+
