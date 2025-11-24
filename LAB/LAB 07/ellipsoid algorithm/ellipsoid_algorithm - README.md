@@ -1,109 +1,71 @@
-# Ellipsoid Method for Linear Feasibility (C Implementation)
+# 📖 Overview
+This C program implements the Ellipsoid Algorithm to find a feasible point within a system of linear inequalities  Ax≤b  in 2D. It iteratively updates an ellipsoid containing the feasible region based on violated constraints until a feasible solution is found or a maximum iteration count is reached.
 
-This project implements the Ellipsoid Algorithm to find a feasible point that satisfies a set of linear constraints of the form:
+# ⚙️ Usage
+- Compile with: `gcc -o ellipsoid ellipsoid.c -lm`
+- Run the executable: `./ellipsoid`
+- The program checks the provided linear constraints and tries to find a point satisfying all.
+- It prints either the feasible point found or notifies if no solution is found within the iteration limit.
 
-A * x ≤ b
+The constraints in this example are:
 
++1.00x +1.00y <= 4.00
 
-The example uses a 2-dimensional system (`N = 2`) and demonstrates how the ellipsoid is updated until it finds a feasible point or reaches an iteration limit.
++1.00x -1.00y <= 2.00
 
-## Overview
+-1.00x +0.00y <= 0.00
 
-The program:
++0.00x -1.00y <= 0.00
 
-- Defines four linear constraints  
-- Initializes an ellipsoid with a center and shape matrix  
-- Iteratively checks constraint violations  
-- Updates the ellipsoid center and matrix when a constraint is violated  
-- Stops when it finds a feasible point or exceeds `MAX_ITER`
+representing:
 
-This implementation gives a practical demonstration of how the ellipsoid method narrows down a feasible region in optimization and feasibility problems.
+𝑥
++
+𝑦
+≤
+4
+x+y≤4
 
-## Constraints Used
+𝑥
+−
+𝑦
+≤
+2
+x−y≤2
 
-The system solved in the code:
+𝑥
+≥
+0
+x≥0
 
-x + y ≤ 4
-x − y ≤ 2
-x ≥ 0
-y ≥ 0
+𝑦
+≥
+0
+y≥0
+# ⏳ Time Complexity
+- Each iteration involves checking constraints (linear in number of constraints \(m\)) and matrix operations on a fixed 2x2 matrix.
+- Overall complexity is approximately O(m×MAX_ITER).
 
+# 💾 Space Complexity
+- Uses fixed-size arrays for ellipsoid matrix and vectors.
+- Space complexity is O( 1 ) as the dimension and \(m\) are fixed/small.
 
-These form a convex polygon in 2D.
+# 🧩 Examples
+Sample output on execution:
+Linear Constraints (A*x <= b):
 
-## Key Components
++1.00x +1.00y <= 4.00
 
-### `mat_vec_mul()`
-Multiplies a 2×2 matrix by a 2D vector.
++1.00x -1.00y <= 2.00
 
-### `dot()`
-Computes the dot product of two vectors.
+-1.00x +0.00y <= 0.00
 
-### Ellipsoid Update Steps
-When a constraint is violated:
++0.00x -1.00y <= 0.00
 
-1. Compute normal vector `g`
-2. Compute `E * g`
-3. Normalize `g` using `sqrt(gᵀEg)`
-4. Shift ellipsoid center
-5. Update the ellipsoid shape matrix `E`
+Initial Ellipsoid Center: (1.0000, 1.0000)
 
-### Termination
-- If all constraints are satisfied at the current center, a feasible point is found.
-- If not found in `MAX_ITER` iterations, the algorithm stops.
+Feasible point found after 11 iterations:
+x = 1.000000, y = 1.000000
 
-## Time Complexity
-
-Let:
-
-n = number of variables (= 2)
-
-m = number of constraints (= 4)
-
-T = number of iterations (MAX_ITER = 5000)
-
-### Per iteration
-
-Check all constraints: O(m)
-
-Matrix-vector multiplication for update: O(n²)
-
-Several vector operations: O(n)
-
-Since n = 2, these are constant-time operations.
-
-### Overall
-Time Complexity = O(T × (m + n²))
-
-
-With fixed small n, the runtime is dominated by:
-
-O(T × m)
-
-
-## Space Complexity
-
-The program stores:
-
-Matrix A: O(m × n)
-
-Matrix E: O(n²)
-
-Vectors center, b, g, Eg: O(n + m)
-
-### Total:
-
-Space Complexity = O(mn + n² + m + n)
-
-
-With n = 2, this is effectively O(m).
-
-Memory usage is small and fixed.
-
-
-## Compilation
-
-Use GCC (links math library):
-
-```bash
-gcc ellipsoid.c -o ellipsoid -lm
+---
+The ellipsoid algorithm is particularly useful for solving feasibility problems and linear programming when the constraints define a convex region.
