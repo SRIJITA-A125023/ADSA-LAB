@@ -1,73 +1,58 @@
+# 📖 Overview
+This C program implements the Simplex Algorithm to solve linear programming problems with inequalities (both `<=` and `>=`) and non-negativity constraints. It accepts user input for variables, constraints, and objective function, constructs the simplex tableau, iteratively performs pivot operations, and outputs the optimal solution and objective value.
 
-# Simplex Method in C
+# ⚙️ Usage
+- Compile using: `gcc -o simplex simplex.c`
+- Run the executable: `./simplex`
+- Input the number of variables and constraints.
+- Specify the problem as maximization (1) or minimization (2).
+- Enter each constraint’s coefficients, type (`1` for `<=` or `2` for `>=`), and RHS value.
+- Input the objective function coefficients.
+- The program will display each tableau step and final optimal values for variables and objective.
 
-This program solves linear programming problems using the Simplex method. It works for both maximization and minimization and supports constraints of type `<=` and `>=`.
+      Example for maximization problem:
 
-## Features
+         Enter number of variables: 2
+         Enter number of constraints: 2
+         Enter 1 to Maximize or 2 to Minimize the objective function: 1
 
-- Supports any number of variables and constraints (up to the defined limit).
-- Handles both maximization and minimization.
-- Builds and displays the Simplex tableau.
-- Performs pivot operations and prints each iteration.
-- Detects unbounded solutions.
-- Prints the final optimal values of the decision variables and objective function.
+         Constraint 1:
+           Enter coefficient of x1: 1
+           Enter coefficient of x2: 2
+           Enter constraint type (1 for <= , 2 for >=): 1
+           Enter RHS value: 8
 
-## How It Works
+         Constraint 2:
+            Enter coefficient of x1: 3
+            Enter coefficient of x2: 2
+            Enter constraint type (1 for <= , 2 for >=): 1
+            Enter RHS value: 12
 
-1. You enter:
-   - Number of variables
-   - Number of constraints
-   - Whether the goal is maximization or minimization
-   - Coefficients of each constraint
-   - Type of each constraint (`<=` or `>=`)
-   - Objective function coefficients
+         Enter coefficients of Objective Function (Z = c1x1 + c2x2 ...):
+         Coefficient of x1: 3
+         Coefficient of x2: 5
 
-2. The program:
-   - Builds the initial tableau
-   - Performs the Simplex iterations
-   - Prints intermediate tableaus
-   - Outputs the final solution
+# ⏳ Time Complexity
+- Each pivot operation involves checks across all constraints and variables O(m n).
+- The number of pivot steps varies by problem and size but is generally exponential in the worst case.
+- Practical performance is often efficient for moderate problem sizes.
 
-## Time Complexity
+# 💾 Space Complexity
+- Uses a fixed-size 2D array tableau of size \((m+1) * (n+1)\).
+- Space complexity is \(O(m n)).
 
-Let:
+# 🧩 Examples
+Sample output after solving a maximization problem (from the example above):
 
-m = number of constraints
+Optimal Solution Found:
+x1 = 4.00,
+x2 = 2.00
 
-n = number of variables + slack/surplus variables
+Optimal Value of Z = 23.00
 
-### Per pivot:
+For an unbounded problem, it prints:
+Unbounded solution!
 
-Finding entering variable: O(n)
+---
+This code provides a clear, interactive way to apply the Simplex Method to linear programming problems with mixed inequality types and objective goals.
 
-Finding leaving variable: O(m)
-
-Row operations: O(m × n)
-
-### Total:
-
-If the algorithm performs k pivots:
-
-Time Complexity = O(k × m × n)
-
-
-In practice, k is usually moderate, but in worst-case theoretical scenarios Simplex can take exponential time.
-
-## Space Complexity
-
-The tableau size is:
-
-(m + 1) rows × (n + 1) columns
-
-
-So memory usage is:
-
-Space Complexity = O(m × n)
-
-## Compilation
-
-Use any C compiler. For GCC:
-
-```bash
-gcc simplex.c -o simplex
-v
