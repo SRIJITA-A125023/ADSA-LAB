@@ -14,12 +14,12 @@ Enter sorted elements: 1 3 5 7 9
 Enter element to search: 7
 
 # ⏳ Time Complexity
-- Binary Search: (O(log n)) — splits the search interval into 2 parts.
-- Ternary Search: (O(log_3 n)) — splits the search interval into 3 parts.
+- Binary Search: O(log n) — splits the search interval into 2 parts.
+- Ternary Search: O(log_3 n) — splits the search interval into 3 parts.
 Despite the base difference, binary search usually requires fewer comparisons in practice.
 
 # 💾 Space Complexity
-- Both algorithms use (O(1)) additional space, as they operate in-place with iterative loops.
+- Both algorithms use O(1) additional space, as they operate in-place with iterative loops.
 
 # 🧩 Examples
 
