@@ -1,51 +1,68 @@
-# Greedy Bipartite Graph Matching in C
+# 📖 Overview
+This C program performs a greedy matching algorithm on a bipartite graph. It takes the number of nodes on the left and right sets and a list of edges between them, then iteratively tries to add edges to the matching without conflicts, outputting the matching process and final matched pairs.
 
-This program performs a simple greedy matching on a bipartite graph. It takes a set of edges between two partitions and selects pairs step by step, avoiding conflicts with already matched nodes.
+# ⚙️ Usage
+- Compile the program using a C compiler: `gcc -o greedy_match greedy_match.c`
+- Run the executable: `./greedy_match`
+- Input the number of left nodes, right nodes, and edges when prompted.
+- Enter each edge as two integers representing a connection between a left node and a right node.
+- The program prints the step-by-step greedy matching process and final matched pairs.
 
-## Overview
+  Example input:
+      5 4 8
+      1 6
+      1 7
+      2 6
+      3 7
+      3 9
+      4 7
+      5 8
+      5 9
 
-The graph consists of:
-- A left partition with `nLeft` nodes
-- A right partition with `nRight` nodes
-- A list of `e` edges connecting nodes between the two partitions
+  # ⏳ Time Complexity
+- The algorithm processes each edge once.
+- For each edge, it checks if nodes are unmatched in \(O(1)\).
+- Overall time complexity: \(O(e)\), where \(e\) is the number of edges.
 
-The algorithm scans edges in the given order and includes an edge in the matching only if both endpoints are currently unmatched.
+# 💾 Space Complexity
+- Uses arrays sized based on the maximum number of nodes.
+- Space complexity: \(O(n + m + e)\) for storing nodes and edges.
 
-## Features
+# 🧩 Examples
+Running with the example input produces:
+--- Greedy Matching Process ---
 
-- Accepts up to 100 left nodes, 100 right nodes, and 1000 edges.
-- Performs a straightforward greedy matching.
-- Prints step-by-step decisions for each edge.
-- Shows the full matching state after each iteration.
-- Displays the final set of matched pairs.
+Considering edge (1, 6): Added to matching.
+Current matching: 1-6
 
-## Time Complexity
+Considering edge (1, 7): Skipped (conflict with existing match).
+Current matching: 1-6
 
-Let:
+Considering edge (2, 6): Skipped (conflict with existing match).
+Current matching: 1-6
 
-e = number of edges
+Considering edge (3, 7): Added to matching.
+Current matching: 1-6, 3-7
 
-nLeft, nRight = number of nodes on each side
+Considering edge (3, 9): Skipped (conflict with existing match).
+Current matching: 1-6, 3-7
 
-The algorithm checks each edge once and each check is constant time:
+Considering edge (4, 7): Skipped (conflict with existing match).
+Current matching: 1-6, 3-7
 
-Time Complexity: O(e)
+Considering edge (5, 8): Added to matching.
+Current matching: 1-6, 3-7, 5-8
 
-## Space Complexity
+Considering edge (5, 9): Skipped (conflict with existing match).
+Current matching: 1-6, 3-7, 5-8
 
-The program stores:
+Final Matching: 
 
-Edge list: O(e)
+  Total matched pairs: 3
+  
+    1 -> 6
+    3 -> 7
+    5 -> 8
 
-Match arrays for left and right partitions: O(nLeft + nRight)
-
-Total:
-
-Space Complexity: O(e + nLeft + nRight)
-
-## How to Compile
-
-Use any C compiler. For example, with GCC:
-
-```bash
-gcc matching.c -o matching
+---
+This approach provides a simple greedy method to find a maximal matching in a bipartite graph but does not guarantee the maximum matching size.
