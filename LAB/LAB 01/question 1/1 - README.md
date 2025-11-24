@@ -9,17 +9,17 @@ This C program approximates and sorts the asymptotic growth rates of twelve math
 No user input is required. The output is printed directly to the terminal.
 
 # ⏳ Time Complexity
-- Computing each function: \(O(1)\) per function.
-- Sorting 12 elements: \(O(12 log 12)\) (negligible for this small fixed set).
-- Overall complexity: \(O(1)\) since the number of functions is constant.
+- Computing each function: O(1) per function.
+- Sorting 12 elements: O(12 log 12) (negligible for this small fixed set).
+- Overall complexity: O(1) since the number of functions is constant.
 
 # 💾 Space Complexity
 - Uses an array of 12 structures—fixed size.
 - Minimal additional stack usage.
-- Overall space complexity: \(O(1)\).
+- Overall space complexity: O(1)
 
 # 🧩 Examples
-Sample output for \( n = 102573 \):
+Sample output for ( n = 102573 ):
 Functions in increasing order of growth (approximate for n=102573):
 
 1/n => 9.749628e-06
