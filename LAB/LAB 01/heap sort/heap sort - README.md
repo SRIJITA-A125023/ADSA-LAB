@@ -18,13 +18,13 @@ Enter 5 elements: 4 10 3 5 1
 Sorted array: 1 3 4 5 10
 
 # ⏳ Time Complexity
-- Building the max heap takes \(O(n)\) time.
-- Each of the \(n-1\) removals from the heap takes \(O(\log n)\) time due to the `heapify` calls.
-- Overall time complexity is \(O(n log n)\).
+- Building the max heap takes O(n) time.
+- Each of the (n-1) removals from the heap takes O(log n) time due to the `heapify` calls.
+- Overall time complexity is O(n log n).
 
 # 💾 Space Complexity
 - The algorithm sorts in place, using only a constant amount of additional space.
-- Space complexity is \(O(1)\) (ignoring input storage).
+- Space complexity is O(1) (ignoring input storage).
 
 # 🧩 Examples
 Input:
