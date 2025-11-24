@@ -9,14 +9,18 @@ This code implements the Heap Sort algorithm in C, which sorts an array of integ
 - The program outputs the sorted array in ascending order.
 
 Example:
+
+
 Enter number of elements: 5
+
 Enter 5 elements: 4 10 3 5 1
+
 Sorted array: 1 3 4 5 10
 
 # ⏳ Time Complexity
 - Building the max heap takes \(O(n)\) time.
 - Each of the \(n-1\) removals from the heap takes \(O(\log n)\) time due to the `heapify` calls.
-- Overall time complexity is \(O(n \log n)\).
+- Overall time complexity is \(O(n log n)\).
 
 # 💾 Space Complexity
 - The algorithm sorts in place, using only a constant amount of additional space.
