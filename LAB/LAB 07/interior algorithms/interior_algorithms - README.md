@@ -1,104 +1,46 @@
+# 📖 Overview
+This C program implements a basic Interior Point Method using gradient descent to solve a linear optimization problem with equality constraints. It minimizes a linear objective function \( c^T x \) subject to \( Ax = b \) and \( x > 0 \) by iteratively updating \( x \) while maintaining feasibility and positivity.
 
-# Interior Point Method (Barrier Method) for Linear Optimization in C
+# ⚙️ Usage
+- Compile with: `gcc -o interior_point interior_point.c -lm`
+- Run the executable: `./interior_point`
+- Input the number of variables \( n \), number of equality constraints \( m \), matrix \( A \), vector \( b \), and cost vector \( c \) as prompted.
+- The program performs interior point iterations, printing intermediate results and outputs the approximate optimal solution vector \( x \) and objective value.
 
-This project implements a simple interior point method using a logarithmic barrier and gradient descent updates. The program solves linear optimization problems of the form:
+Example input (from the embedded comment):
+Enter number of variables (n): 2
+Enter number of equality constraints (m): 1
+Enter matrix A (1 x 2):
+1 1
+Enter vector b (1 elements):
+10
+Enter cost vector c (2 elements):
+1 1
 
-Minimize: cᵀx
-Subject to: A x = b
-x > 0
+# ⏳ Time Complexity
+- Each iteration performs gradient calculation O( n ) and matrix-vector multiplication O(mn).
+- The main loop runs for 20 outer iterations and up to 20,000 inner iterations.
+- Overall time complexity is approximately O ( n + m ).
 
+# 💾 Space Complexity
+- Uses fixed-size arrays of dimensions \(m * n\) and vectors of length \(n\) and \(m\).
+- Space complexity is O( mn ).
 
-It supports up to 20 variables and 20 equality constraints.
+# 🧩 Examples
+Sample run for the problem minimizing \(x_1 + x_2\) with constraint \(x_1 + x_2 = 10\):
 
-## Overview
+Iter 0 mu = 1.00000 x = [ 4.9774 5.0226 ] f = 4.01234
 
-The algorithm:
+Iter 1 mu = 0.50000 x = [ 4.8815 5.1185 ] f = 4.04567
 
-- Starts from an interior point (`x = 1` for all variables)
-- Uses a barrier function with parameter `mu`
-- Performs gradient descent on the barrier-augmented objective
-- Projects the iterate back toward feasibility (`Ax = b`)
-- Gradually reduces `mu` to move closer to the true optimum
+...
 
-This is an educational demonstration rather than a production-grade solver.
-
-## Key Components
-
-### `objective(x, c, mu, n)`
-Computes the barrier-augmented objective:
-
-f(x) = cᵀx − μ Σ log(xᵢ)
-
-
-
-### `gradient(grad, x, c, mu, n)`
-Computes the gradient of the objective.
-
-### `matvec()`
-Simple matrix–vector multiplication to compute `A x`.
-
-### Algorithm Structure
-For each outer iteration:
-
-1. Compute gradient  
-2. Perform gradient descent update on `x`  
-3. Enforce positivity (`xᵢ > 0`)  
-4. Project `x` back toward satisfying `A x = b`  
-5. Reduce `μ` by a factor (`MU_REDUCTION = 0.5`)  
-
-After all iterations, the program prints the approximate optimal solution and objective value.
-
-## Time Complexity
-
-Let:
-
-n = number of variables
-
-m = number of constraints
-
-T = number of outer iterations (here: 20)
-
-K = number of inner gradient-descent iterations (MAX_ITER = 20000)
-
-Per inner iteration
-
-Gradient computation: O(n)
-
-Matrix-vector multiply (A x): O(mn)
-
-Projection step: O(mn)
-
-Total per inner loop: O(mn)
-
-### Full algorithm
-Time = O(T × K × m × n)
+Iter 19 mu = 6.10352e-06 x = [ 5.0000 5.0000 ] f = 5.00000
 
 
-Given defaults (T = 20, K = 20000, m, n ≤ 20), the run is computationally light for small problems but scales poorly.
+Optimal x ≈ [ 5.000000 5.000000 ]
 
-## Space Complexity
+Optimal objective ≈ 10.000000
 
-The program stores:
-
-Matrix A: O(mn)
-
-Vectors x, c, b, grad, Ax: O(n + m)
-
-Total:
-
-Space = O(mn + n + m)
-
-
-Since dimensions are fixed at small maximum sizes (20 × 20), memory usage is small.
-
-## Compilation
-
-Compile using GCC with math library:
-
-```bash
-gcc interior_point.c -o interior_point -lm
-
-
-f(x) = cᵀx − μ Σ log(xᵢ)
-
-
+---
+This implementation demonstrates solving constrained linear optimization problems using interior point methods with simple gradient descent and projection.
