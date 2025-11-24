@@ -1,42 +1,66 @@
-# Function Growth Comparator in C
+# Algorithm Growth Comparison – README
 
-This project evaluates and compares the growth rates of several mathematical functions by computing their values at a large input size (`n = 102573`). The program then sorts the functions based on their computed values and prints them in increasing order.
+This project contains a C program that evaluates and compares the growth of several mathematical functions by computing their values at a large input size and sorting them in increasing order. It is intended as a simple tool to study how different asymptotic functions behave relative to each other.
 
 ## Overview
 
-The program defines twelve different mathematical functions, each representing a different growth rate. These range from logarithmic and polynomial to exponential forms.
+The program defines twelve functions involving logarithmic, polynomial, root, exponential, and mixed expressions. It evaluates each function at `n = 102573` and then uses `qsort` to sort them based on their computed values.
 
-It computes the value of each function at `N = 102573`, stores them in a struct array, sorts them using `qsort`, and prints the results.
+## Features
 
-This is useful for studying asymptotic behavior and getting an intuition for how different functions scale.
-
-## Functions Included
-
-The code compares the following functions:
-
-- `n log₂(n)`
-- `12 √n`
-- `1/n`
-- `n^(log₂ n)`
-- `100n² + 6n`
-- `n^0.51`
-- `n² - 324`
-- `50 √n`
-- `2n³`
-- `3ⁿ`
-- `2³² * n`
-- `log₂ n`
+* Computes values for a wide variety of growth functions
+* Uses a struct-based approach to store and sort function results
+* Outputs an ordered list showing which functions grow fastest and slowest
+* Demonstrates practical use of `qsort` with a custom comparator
 
 ## How It Works
 
-1. Each function is computed at the constant `N`.
-2. Each result is stored in a `Function` struct with a label and value.
-3. All functions are sorted using `qsort`.
-4. The sorted list is printed, showing approximate growth comparison.
+1. Each mathematical function is implemented as a separate function.
+2. A `Function` struct stores the display name and computed value.
+3. All functions are evaluated at the same `n`.
+4. The results are sorted with `qsort`.
+5. The sorted results are printed.
 
-## Build and Run
+## Usage
 
-### Compile
+Compile the program using a C compiler such as GCC:
 
 ```bash
-gcc main.c -o growth -lm
+gcc program.c -lm -o growth_compare
+```
+
+Run the executable:
+
+```bash
+./growth_compare
+```
+
+The output will show all functions in increasing order of growth.
+
+## Example Output
+
+```
+Functions in increasing order of growth (approximate for n=102573):
+...
+```
+
+Individual values will vary based on system and math library precision.
+
+## Time Complexity
+
+* Each function evaluation runs in constant time.
+* Total evaluations: 12
+* Sorting with `qsort`: O(k log k), where k = number of functions (12)
+* Overall runtime: O(1) for practical purposes.
+
+## Space Complexity
+
+* Memory usage is constant: only 12 structs plus standard stack usage
+* Overall memory usage: O(1)
+
+## Notes
+
+* The comparison is approximate because values are evaluated at a single input size.
+* Exponential functions may overflow for large inputs depending on system architecture.
+
+Provide the next code whenever you're ready, and I’ll add or extend the README accordingly.
