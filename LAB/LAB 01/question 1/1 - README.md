@@ -10,7 +10,7 @@ No user input is required. The output is printed directly to the terminal.
 
 # ⏳ Time Complexity
 - Computing each function: \(O(1)\) per function.
-- Sorting 12 elements: \(O(12 \log 12)\) (negligible for this small fixed set).
+- Sorting 12 elements: \(O(12 log 12)\) (negligible for this small fixed set).
 - Overall complexity: \(O(1)\) since the number of functions is constant.
 
 # 💾 Space Complexity
@@ -21,17 +21,29 @@ No user input is required. The output is printed directly to the terminal.
 # 🧩 Examples
 Sample output for \( n = 102573 \):
 Functions in increasing order of growth (approximate for n=102573):
+
 1/n => 9.749628e-06
+
 log2 n => 16.657120e+00
+
 12 sqrt(n) => 12102.886984e+00
+
 50 sqrt(n) => 50428.694101e+00
+
 n^0.51 => 3348.761742e+00
+
 n log2 n => 1.708418e+06
+
 n^2 - 324 => 1.052583e+10
+
 100n^2 + 6n => 1.025831e+12
+
 2n^3 => 2.163247e+15
+
 n^(log2 n) => [Extremely large value]
+
 2^32 * n => 4.407032e+14
+
 3^n => [Overflow/huge value]
 
 *(Values may vary slightly depending on math.h implementation and floating-point precision.)*
