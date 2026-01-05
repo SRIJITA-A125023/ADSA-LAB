@@ -1,2 +1,2 @@
 # ADSA
-A repository comparising class assignment and lab work for Advance Data Structures and Algorithms.
+A repository comparising class assignment, lab work and presentation for Advance Data Structures and Algorithms.
