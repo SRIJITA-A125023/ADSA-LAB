@@ -1,0 +1,242 @@
+\documentclass{article}
+
+% --------------------
+% Packages
+% --------------------
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+
+% --------------------
+% Page Layout
+% --------------------
+\geometry{
+  top=1in,
+  bottom=1in,
+  left=1in,
+  right=1in
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1em}
+
+% --------------------
+% Document
+% --------------------
+\begin{document}
+\vspace*{-1.5cm}
+
+% --------------------
+% Header Section
+% --------------------
+\hspace{0.7cm}
+\begin{minipage}[c]{0.7\textwidth}
+\vspace{0.5cm}
+\textbf{MTech CSE – 1st Semester} \\  
+Student ID: \textbf{A125023} \\  
+Student Name: \textbf{SRIJITA VERMA}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}{0.2\textwidth}
+\centering
+\includegraphics[width=0.6\linewidth]{college_logo.jpg}
+\end{minipage}
+
+\vspace{1cm}
+
+% --------------------
+% Question Section
+% --------------------
+\section*{Question}
+Using the above result, prove that the time complexity of the
+\textsc{Build-Heap} algorithm is $O(n)$.
+
+We use the result proved in Question~3(a):
+
+\textit{In a heap containing $n$ elements, the number of nodes at height $h$ is at
+most}
+\[
+N_h \le \left\lceil \frac{n}{2^{h+1}} \right\rceil.
+\]
+
+
+% --------------------
+% Answer Section
+% --------------------
+\section*{Answer}
+\section*{Overview of the Approach}
+
+The \textsc{Build-Heap} algorithm constructs a heap from an arbitrary array by
+calling the \textsc{Heapify} procedure on internal nodes, starting from the
+lowest internal nodes and moving upward to the root.
+
+Although a single call to \textsc{Heapify} can take $O(\log n)$ time in the worst
+case, we show that the total cost of all Heapify calls combined is linear, i.e.,
+$O(n)$.
+
+This is achieved by:
+\begin{itemize}
+  \item Grouping nodes by their height,
+  \item Bounding the number of nodes at each height using the result from
+        Question~3(a),
+  \item Summing the total work over all heights.
+\end{itemize}
+
+The \textsc{Build-Heap} algorithm constructs the heap in a bottom-up manner by applying \textsc{Heapify} starting from the lowest internal nodes up to the root.
+\subsection*{Why \textsc{Build-Heap} Is Not $O(n \log n)$}
+
+A naive analysis might assume that since \textsc{Heapify} takes $O(\log n)$ time
+and is called on $O(n)$ nodes, the total running time is $O(n \log n)$. This
+argument is incorrect because it ignores the fact that most nodes in a heap are
+located at very small heights. The height-based analysis shows that the majority
+of \textsc{Heapify} calls take constant or near-constant time, while only a few
+nodes incur the maximum cost.
+
+\section*{Preliminaries}
+
+\subsection*{Cost of \textsc{Heapify}}
+
+The \textsc{Heapify} procedure is called on a node and may move the node down the
+heap. The maximum number of levels it can move down equals the height of that
+node.
+
+Therefore, the running time of \textsc{Heapify} on a node of height $h$ is:
+\[
+O(h).
+\]
+
+\subsection*{Structure of \textsc{Build-Heap}}
+
+The standard \textsc{Build-Heap} algorithm works as follows:
+\begin{itemize}
+  \item It calls \textsc{Heapify} on all non-leaf nodes.
+  \item Leaves have height $0$ and require no work.
+  \item Nodes closer to the root have larger height and higher cost per Heapify
+        call.
+\end{itemize}
+
+Leaf nodes are excluded since they trivially satisfy the heap property and require no heapification.
+
+\section*{Step 1: Group Nodes by Height}
+
+Let:
+\begin{itemize}
+  \item $n$ be the number of elements in the heap,
+  \item $h \ge 0$ denote a height,
+  \item $N_h$ be the number of nodes of height $h$.
+\end{itemize}
+
+From Question~3(a), we know that:
+\[
+N_h \le \left\lceil \frac{n}{2^{h+1}} \right\rceil.
+\]
+
+\section*{Step 2: Cost Contributed by Nodes at Height $h$}
+
+Each node of height $h$:
+\begin{itemize}
+  \item Requires $O(h)$ time for \textsc{Heapify}.
+\end{itemize}
+
+Thus, the total cost contributed by all nodes at height $h$ is:
+\[
+O(N_h \cdot h).
+\]
+
+Substituting the bound on $N_h$:
+\[
+O\!\left( \frac{n}{2^{h+1}} \cdot h \right).
+\]
+
+\section*{Step 3: Total Cost of \textsc{Build-Heap}}
+
+To obtain the total running time, we sum over all possible heights:
+\[
+T(n) = \sum_{h=0}^{\lfloor \log n \rfloor}
+O\!\left( \frac{n}{2^{h+1}} \cdot h \right).
+\]
+
+Factoring out $n$:
+\[
+T(n) = O\!\left(
+n \sum_{h=0}^{\lfloor \log n \rfloor} \frac{h}{2^{h+1}}
+\right).
+\]
+
+\section*{Step 4: Evaluating the Summation}
+
+Consider the infinite series:
+\[
+\sum_{h=0}^{\infty} \frac{h}{2^{h+1}}.
+\]
+
+This series is convergent and evaluates to a constant. In fact:
+\[
+\sum_{h=0}^{\infty} \frac{h}{2^{h+1}} = 1.
+\]
+
+Since truncating a convergent series only decreases its value, we have:
+\[
+\sum_{h=0}^{\lfloor \log n \rfloor} \frac{h}{2^{h+1}} \le 1.
+\]
+
+So, $\sum_{h=0}^{\infty} \frac{h}{2^{h+1}}$ is a convergent geometric series
+weighted by $h$, its value is bounded by a constant independent of $n$.
+
+\section*{Step 5: Final Time Complexity}
+
+Substituting this bound back into the expression for $T(n)$:
+\[
+T(n) = O(n \cdot 1) = O(n).
+\]
+
+\section*{Final Result}
+
+
+
+\[
+\boxed{\textsc{Build-Heap runs in } O(n) \text{ time.}}
+\]
+
+Moreover, this bound is tight, as every element in the input array must be
+examined at least once, implying a lower bound of $\Omega(n)$ for heap
+construction.
+
+\section*{Remark}
+
+Although the \textsc{Heapify} operation has a worst-case time complexity of
+$O(\log n)$, the \textsc{Build-Heap} algorithm runs in linear time because only a
+small number of nodes are located at large heights. Most nodes are near the
+leaves and require constant or very small time to heapify. The bound on the
+number of nodes at each height ensures that the total work performed across all
+heap levels is linear in $n$.
+\section*{Intuition Behind the Result}
+
+\begin{itemize}
+  \item Most nodes in a heap are near the leaves.
+  \item Nodes near the leaves have very small height.
+  \item Expensive Heapify operations are performed only on a few nodes near the
+        root.
+  \item The large number of cheap operations dominates the total cost.
+  \item Nodes at level $k$ from the root have height approximately $\log n - k$,
+      and their number grows exponentially as $k$ increases.
+\end{itemize}
+
+This imbalance ensures that the total running time is linear, not $O(n \log n)$.
+
+\section*{Why This Result Is Important}
+
+This analysis explains a key and somewhat counterintuitive fact:
+
+Even though \textsc{Heapify} takes $O(\log n)$ time in the worst case,
+\textsc{Build-Heap} runs in $O(n)$ time overall.
+
+This result is fundamental in:
+\begin{itemize}
+  \item Heap construction,
+  \item Heapsort analysis,
+  \item Priority queue implementations.
+\end{itemize}
+
+\end{document}

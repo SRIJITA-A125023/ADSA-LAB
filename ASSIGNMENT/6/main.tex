@@ -1,0 +1,361 @@
+\documentclass{article}
+
+% --------------------
+% Packages
+% --------------------
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+
+% --------------------
+% Page Layout
+% --------------------
+\geometry{
+  top=1in,
+  bottom=1in,
+  left=1in,
+  right=1in
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1em}
+
+% --------------------
+% Document
+% --------------------
+\begin{document}
+\vspace*{-1.5cm}
+
+% --------------------
+% Header Section
+% --------------------
+\hspace{0.7cm}
+\begin{minipage}[c]{0.7\textwidth}
+\vspace{0.5cm}
+\textbf{MTech CSE – 1st Semester} \\  
+Student ID: \textbf{A125023} \\  
+Student Name: \textbf{SRIJITA VERMA}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}{0.2\textwidth}
+\centering
+\includegraphics[width=0.6\linewidth]{college_logo.jpg}
+\end{minipage}
+
+\vspace{1cm}
+
+% --------------------
+% Question Section
+% --------------------
+\section*{Question}
+Prove that if a matrix $A$ is non-singular, then its Schur complement is also
+non-singular.
+
+% --------------------
+% Answer Section
+% --------------------
+\section*{Answer}
+\section*{Preliminaries and Definitions}
+
+Let $A \in \mathbb{R}^{n \times n}$ be a square matrix partitioned as
+\[
+A =
+\begin{bmatrix}
+A_{11} & A_{12} \\
+A_{21} & A_{22}
+\end{bmatrix},
+\]
+where:
+\begin{itemize}
+  \item $A_{11} \in \mathbb{R}^{k \times k}$,
+  \item $A_{22} \in \mathbb{R}^{(n-k) \times (n-k)}$,
+\end{itemize}
+and the block dimensions are compatible.
+
+We assume that $A_{11}$ is invertible.
+
+This assumption ensures that the Schur complement of $A_{11}$ in $A$ is
+well-defined.
+
+\subsection*{Definition: Schur Complement}
+
+The Schur complement of $A_{11}$ in $A$ is defined as
+\[
+S = A_{22} - A_{21} A_{11}^{-1} A_{12}.
+\]
+
+\section*{Goal}
+
+We are given that:
+\begin{itemize}
+  \item the full matrix $A$ is non-singular,
+\end{itemize}
+and we must prove that:
+\begin{itemize}
+  \item the Schur complement $S$ is also non-singular.
+\end{itemize}
+
+\section*{Key Idea of the Proof}
+
+The proof relies on:
+\begin{itemize}
+  \item block Gaussian elimination,
+  \item factorization of the matrix $A$,
+  \item the fact that a product of matrices is invertible if and only if each
+        factor is invertible.
+\end{itemize}
+
+\section*{Step 1: Block Factorization of $A$}
+
+Using block Gaussian elimination, the matrix $A$ can be factored as:
+\[
+A =
+\begin{bmatrix}
+I & 0 \\
+A_{21} A_{11}^{-1} & I
+\end{bmatrix}
+\begin{bmatrix}
+A_{11} & A_{12} \\
+0 & S
+\end{bmatrix},
+\]
+where
+\[
+S = A_{22} - A_{21} A_{11}^{-1} A_{12}.
+\]
+
+\section*{Step 2: Analyze Invertibility of Each Factor}
+
+\subsection*{First Factor}
+
+Let
+\[
+L =
+\begin{bmatrix}
+I & 0 \\
+A_{21} A_{11}^{-1} & I
+\end{bmatrix}.
+\]
+
+This is a block lower triangular matrix with identity matrices on the diagonal.
+Hence, $L$ is invertible.
+
+\subsection*{Second Factor}
+
+Let
+\[
+U =
+\begin{bmatrix}
+A_{11} & A_{12} \\
+0 & S
+\end{bmatrix}.
+\]
+
+This is a block upper triangular matrix. Its determinant is given by
+\[
+\det(U) = \det(A_{11}) \cdot \det(S).
+\]
+
+\section*{Step 3: Use Non-Singularity of $A$}
+
+Since
+\[
+A = LU,
+\]
+and $A$ is non-singular while $L$ is invertible, it follows that $U$ must also
+be non-singular. Therefore,
+\[
+\det(A_{11}) \cdot \det(S) \neq 0.
+\]
+
+Because $A_{11}$ is assumed invertible, we have
+\[
+\det(A_{11}) \neq 0,
+\]
+which implies
+\[
+\det(S) \neq 0.
+\]
+
+Thus, the Schur complement $S$ is non-singular.
+
+\section*{Final Conclusion}
+
+If $A$ is non-singular and $A_{11}$ is invertible, then its Schur complement
+\[
+S = A_{22} - A_{21} A_{11}^{-1} A_{12}
+\]
+is also non-singular.
+
+\section*{Worked Numerical Example}
+
+Consider the matrix:
+\[
+A =
+\begin{bmatrix}
+2 & 1 & 0 \\
+1 & 3 & 1 \\
+0 & 1 & 2
+\end{bmatrix}
+\]
+
+Partition $A$ as:
+\[
+A =
+\begin{bmatrix}
+A_{11} & A_{12} \\
+A_{21} & A_{22}
+\end{bmatrix}
+\]
+where:
+\[
+A_{11} = [2], \quad
+A_{12} = [1 \;\; 0], \quad
+A_{21} =
+\begin{bmatrix}
+1 \\
+0
+\end{bmatrix}, \quad
+A_{22} =
+\begin{bmatrix}
+3 & 1 \\
+1 & 2
+\end{bmatrix}
+\]
+
+Since $\det(A) = 8 \neq 0$, the matrix $A$ is non-singular, and
+$A_{11}$ is invertible with $A_{11}^{-1} = \frac{1}{2}$.
+
+The Schur complement of $A_{11}$ is:
+\[
+S = A_{22} - A_{21} A_{11}^{-1} A_{12}
+=
+\begin{bmatrix}
+3 & 1 \\
+1 & 2
+\end{bmatrix}
+-
+\begin{bmatrix}
+1 \\
+0
+\end{bmatrix}
+\frac{1}{2}
+\begin{bmatrix}
+1 & 0
+\end{bmatrix}
+\]
+
+\[
+S =
+\begin{bmatrix}
+\frac{5}{2} & 1 \\
+1 & 2
+\end{bmatrix}
+\]
+
+The determinant of $S$ is:
+\[
+\det(S) = \frac{5}{2} \cdot 2 - 1 = 4 \neq 0
+\]
+
+Thus, the Schur complement is non-singular, illustrating the result.
+\section*{Converse Result}
+
+We now prove the converse statement.
+
+\subsection*{Theorem}
+If $A_{11}$ and its Schur complement
+\[
+S = A_{22} - A_{21} A_{11}^{-1} A_{12}
+\]
+are both non-singular, then the block matrix
+\[
+A =
+\begin{bmatrix}
+A_{11} & A_{12} \\
+A_{21} & A_{22}
+\end{bmatrix}
+\]
+is non-singular.
+
+\subsection*{Proof}
+
+Using block matrix factorization, we write:
+\[
+A =
+\begin{bmatrix}
+I & 0 \\
+A_{21} A_{11}^{-1} & I
+\end{bmatrix}
+\begin{bmatrix}
+A_{11} & A_{12} \\
+0 & S
+\end{bmatrix}
+\]
+
+The first factor is invertible since it is block lower triangular with
+identity matrices on the diagonal. The second factor is invertible
+because both $A_{11}$ and $S$ are invertible.
+
+Since $A$ is a product of two invertible matrices, it is itself
+invertible. Hence, $A$ is non-singular.
+\hfill $\square$
+\section*{Relation to LU and LUP Decomposition}
+
+The Schur complement arises naturally during LU and LUP decomposition
+of block matrices.
+
+In block LU decomposition, a matrix $A$ is factorized as:
+\[
+A =
+\begin{bmatrix}
+A_{11} & A_{12} \\
+A_{21} & A_{22}
+\end{bmatrix}
+=
+\begin{bmatrix}
+I & 0 \\
+A_{21} A_{11}^{-1} & I
+\end{bmatrix}
+\begin{bmatrix}
+A_{11} & A_{12} \\
+0 & S
+\end{bmatrix}
+\]
+
+where $S$ is the Schur complement of $A_{11}$.
+
+Thus, the Schur complement represents the remaining block after
+eliminating the variables corresponding to $A_{11}$ using Gaussian
+elimination. Non-singularity of $S$ ensures that the elimination
+process can proceed without breakdown.
+
+In the presence of pivoting, the same structure appears in LUP
+decomposition, where row permutations are applied before computing
+the Schur complement. The non-singularity of Schur complements is
+therefore essential for the stability and correctness of LU/LUP-based
+algorithms. This block factorization underlies the $O(n^3)$ complexity of LU decomposition
+and the correctness of subsequent $O(n^2)$ solve phases.
+
+\section*{Remarks}
+
+This result is fundamental in:
+\begin{itemize}
+  \item block LU decomposition,
+  \item numerical linear algebra,
+  \item matrix inversion formulas,
+  \item optimization and control theory.
+\end{itemize}
+
+A symmetric result holds if $A_{22}$ is invertible, in which case the Schur
+complement of $A_{22}$ is also non-singular.
+
+\section*{Interpretation (Intuition)}
+
+Schur complements arise naturally when eliminating variables in block linear
+systems. Non-singularity of the full system implies that no information is lost
+during elimination. Hence, the reduced system represented by the Schur
+complement must also be non-singular.
+
+\end{document}

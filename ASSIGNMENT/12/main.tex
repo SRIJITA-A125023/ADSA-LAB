@@ -1,0 +1,253 @@
+\documentclass{article}
+
+% --------------------
+% Packages
+% --------------------
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+
+% --------------------
+% Page Layout
+% --------------------
+\geometry{
+  top=1in,
+  bottom=1in,
+  left=1in,
+  right=1in
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1em}
+
+% --------------------
+% Document
+% --------------------
+\begin{document}
+\vspace*{-1.5cm}
+
+% --------------------
+% Header Section
+% --------------------
+\hspace{0.7cm}
+\begin{minipage}[c]{0.7\textwidth}
+\vspace{0.5cm}
+\textbf{MTech CSE – 1st Semester} \\  
+Student ID: \textbf{A125023} \\  
+Student Name: \textbf{SRIJITA VERMA}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}{0.2\textwidth}
+\centering
+\includegraphics[width=0.6\linewidth]{college_logo.jpg}
+\end{minipage}
+
+\vspace{1cm}
+
+% --------------------
+% Question Section
+% --------------------
+\section*{Question}
+
+Given a Boolean circuit instance whose output evaluates to \textsc{true},
+explain how the correctness of the result can be verified in polynomial time
+using Depth First Search (DFS).
+
+% --------------------
+% Answer Section
+% --------------------
+\section*{Answer}
+\section*{Background: Boolean Circuits and Verification}
+
+A Boolean circuit is a directed acyclic graph (DAG) where:
+\begin{itemize}
+  \item internal nodes are logic gates (\textsc{AND}, \textsc{OR}, \textsc{NOT}),
+  \item leaves are input variables or constants,
+  \item there is a single designated output gate.
+\end{itemize}
+
+A Boolean circuit instance is considered a \textsc{YES}-instance if, under a given
+input assignment, the output gate evaluates to \textsc{true}.
+
+The task here is verification, not computation. Given that the output is claimed
+to be \textsc{true}, we must verify this claim efficiently.
+
+\section*{Key Idea of Polynomial-Time Verification}
+
+The correctness of a Boolean circuit’s output can be verified by:
+\begin{itemize}
+  \item traversing the circuit from the output gate to the input gates,
+  \item recursively checking that each gate produces the correct output value,
+  \item ensuring consistency with the logical semantics of each gate.
+\end{itemize}
+
+This process can be naturally implemented using Depth First Search (DFS).
+
+\section*{Circuit as a Graph}
+
+The Boolean circuit is modeled as a directed graph:
+\begin{itemize}
+  \item vertices represent gates or input literals,
+  \item directed edges represent signal flow from inputs to outputs.
+\end{itemize}
+
+Since Boolean circuits are acyclic, the resulting graph is a DAG, which is ideal
+for DFS traversal.
+
+\section*{Verification Using DFS}
+
+\subsection*{DFS Strategy}
+
+A DFS is started from the output gate. The algorithm recursively verifies the
+correctness of the output by checking its children.
+
+At each visited node:
+\begin{itemize}
+  \item all input gates (children) are visited,
+  \item their values are verified,
+  \item the gate’s logical operation is checked against the claimed output.
+\end{itemize}
+
+\subsection*{Gate-by-Gate Verification Rules}
+
+Suppose a gate claims to evaluate to \textsc{true}.
+
+\begin{itemize}
+  \item \textbf{AND gate:} All input gates must evaluate to \textsc{true}. DFS
+  verifies each input recursively.
+  \item \textbf{OR gate:} At least one input gate must evaluate to \textsc{true}.
+  DFS verifies that at least one child evaluates to \textsc{true}.
+  \item \textbf{NOT gate:} Its single input must evaluate to \textsc{false}. DFS
+  verifies this condition.
+  \item \textbf{Input literal:} The value is directly checked against the given
+  input assignment.
+\end{itemize}
+
+If all checks succeed, the correctness of the output gate is verified.
+
+\section*{DFS-Based Verification: Pseudocode}
+
+Below is a high-level DFS procedure to verify that the output of a Boolean
+circuit evaluates to \textsc{true} under a given input assignment.
+
+\begin{verbatim}
+Verify(gate):
+    if gate is an input literal:
+        return assigned truth value of gate
+
+    if gate is AND:
+        for each input child c:
+            if Verify(c) == false:
+                return false
+        return true
+
+    if gate is OR:
+        for each input child c:
+            if Verify(c) == true:
+                return true
+        return false
+
+    if gate is NOT:
+        let c be the single input child
+        return NOT Verify(c)
+\end{verbatim}
+
+The verification starts by calling \texttt{Verify(output\_gate)}. If this call
+returns \textsc{true}, the claimed output of the circuit is correct.
+\section*{Why DFS Is Sufficient and Efficient}
+
+\subsection*{Correctness}
+
+DFS guarantees that:
+\begin{itemize}
+  \item every gate contributing to the output is visited,
+  \item the logical correctness of each gate is verified bottom-up,
+  \item no gate is processed before its dependencies.
+\end{itemize}
+
+Because the circuit is acyclic, DFS does not revisit nodes unnecessarily.
+
+\subsection*{Time Complexity}
+
+Let:
+\begin{itemize}
+  \item $n$ be the number of gates,
+  \item $m$ be the number of wires (edges).
+\end{itemize}
+
+DFS visits each gate and each wire exactly once. Therefore, the verification runs
+in:
+\[
+O(n + m),
+\]
+which is polynomial in the size of the circuit.
+
+\section*{Relation to NP Verification}
+
+The Boolean Circuit Value Problem (BCVP) is a canonical $\mathbf{NP}$-complete
+problem.
+
+This verification procedure demonstrates that:
+\begin{itemize}
+  \item given a certificate (the input assignment),
+  \item the correctness of the output being \textsc{true}
+\end{itemize}
+can be verified in polynomial time.
+
+This aligns precisely with the definition of $\mathbf{NP}$: \textsc{YES}-instances
+have efficiently verifiable certificates. DFS provides a structured way to
+perform this verification.
+
+\section*{Relation to Circuit-SAT and NP-Completeness}
+
+The \emph{Circuit-SAT} problem asks whether there exists an input assignment that
+makes a given Boolean circuit evaluate to \textsc{true}. Circuit-SAT is a
+canonical \textbf{NP-complete} problem.
+
+In the context of NP, an input assignment serves as a \emph{certificate} for a
+YES-instance of Circuit-SAT.
+
+The DFS-based verification described above shows that:
+\begin{itemize}
+  \item given a candidate assignment,
+  \item the correctness of the circuit’s output being \textsc{true},
+  \item can be verified in polynomial time.
+\end{itemize}
+
+This directly satisfies the definition of NP: YES-instances admit polynomial-time
+verifiable certificates.
+
+Thus, DFS provides a concrete and efficient mechanism for verifying certificates
+in NP-complete problems such as Circuit-SAT.
+\section*{Why BFS Is Not Necessary}
+
+Although Breadth First Search could traverse the circuit, DFS is preferable
+because:
+\begin{itemize}
+  \item it naturally mirrors recursive gate evaluation,
+  \item it supports bottom-up verification,
+  \item it requires minimal auxiliary memory via recursion or a stack.
+\end{itemize}
+
+Thus, DFS is both conceptually and practically well-suited for this task.
+
+\section*{Final Conclusion}
+
+The correctness of a Boolean circuit’s \textsc{true} output can be verified in
+polynomial time using DFS.
+
+By performing a depth-first traversal from the output gate and verifying the
+logical consistency of each gate with its inputs, correctness is ensured in
+linear time with respect to the circuit size.
+
+\section*{Intuition}
+
+Evaluating a Boolean circuit is like checking a proof tree:
+\begin{itemize}
+  \item DFS follows the reasoning backward,
+  \item verifies each step,
+  \item and confirms that the final conclusion (\textsc{true} output) is justified.
+\end{itemize}
+
+\end{document}

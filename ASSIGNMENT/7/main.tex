@@ -1,0 +1,301 @@
+\documentclass{article}
+
+% --------------------
+% Packages
+% --------------------
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+
+% --------------------
+% Page Layout
+% --------------------
+\geometry{
+  top=1in,
+  bottom=1in,
+  left=1in,
+  right=1in
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1em}
+
+% --------------------
+% Document
+% --------------------
+\begin{document}
+\vspace*{-1.5cm}
+
+% --------------------
+% Header Section
+% --------------------
+\hspace{0.7cm}
+\begin{minipage}[c]{0.7\textwidth}
+\vspace{0.5cm}
+\textbf{MTech CSE – 1st Semester} \\  
+Student ID: \textbf{A125023} \\  
+Student Name: \textbf{SRIJITA VERMA}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}{0.2\textwidth}
+\centering
+\includegraphics[width=0.6\linewidth]{college_logo.jpg}
+\end{minipage}
+
+\vspace{1cm}
+
+% --------------------
+% Question Section
+% --------------------
+\section*{Question}
+Prove that positive-definite matrices are suitable for LU decomposition and do
+not require pivoting to avoid division by zero in the recursive strategy.
+
+% --------------------
+% Answer Section
+% --------------------
+\section*{Answer}
+\section*{Overview and Strategy}
+
+To answer this question, we must show two things:
+\begin{itemize}
+  \item Existence of LU decomposition without pivoting for positive-definite
+        matrices.
+  \item Absence of zero pivots during Gaussian elimination, so no division by
+        zero occurs.
+\end{itemize}
+
+The key idea is that positive-definite matrices have strictly positive leading
+principal minors, which guarantees that all pivots encountered in LU
+decomposition are non-zero and positive.
+
+\section*{Preliminaries and Definitions}
+
+\subsection*{Definition: Positive-Definite Matrix}
+
+A real symmetric matrix $A \in \mathbb{R}^{n \times n}$ is positive-definite if
+\[
+x^{T} A x > 0 \quad \text{for all non-zero } x \in \mathbb{R}^{n}.
+\]
+
+\subsection*{Definition: LU Decomposition (Without Pivoting)}
+
+An LU decomposition of a matrix $A$ is a factorization
+\[
+A = LU,
+\]
+where:
+\begin{itemize}
+  \item $L$ is a unit lower triangular matrix,
+  \item $U$ is an upper triangular matrix.
+\end{itemize}
+
+In Gaussian elimination, the diagonal entries of $U$ are the pivot elements.
+Pivoting is required only if a pivot becomes zero (or numerically unstable).
+
+\section*{Key Theoretical Result}
+
+\subsection*{Theorem (Sylvester’s Criterion)}
+
+A real symmetric matrix $A$ is positive-definite if and only if all its leading
+principal minors are strictly positive, that is,
+\[
+\det(A_k) > 0 \quad \text{for } k = 1, 2, \ldots, n,
+\]
+where $A_k$ denotes the $k \times k$ leading principal submatrix of $A$.
+
+\section*{Step 1: Connection Between LU Decomposition and Leading Principal Minors}
+
+For an LU decomposition without pivoting, the pivots satisfy:
+\[
+u_{kk} = \frac{\det(A_k)}{\det(A_{k-1})},
+\quad k = 1, 2, \ldots, n,
+\]
+with the convention $\det(A_0) = 1$.
+
+Thus, a zero pivot $u_{kk} = 0$ occurs if and only if $\det(A_k) = 0$.
+Therefore, non-zero leading principal minors guarantee non-zero pivots.
+
+\section*{Step 2: Apply Positive-Definiteness}
+
+Since $A$ is positive-definite:
+\begin{itemize}
+  \item $A$ is symmetric,
+  \item by Sylvester’s criterion, $\det(A_k) > 0$ for all $k$.
+\end{itemize}
+
+Hence,
+\[
+u_{kk} = \frac{\det(A_k)}{\det(A_{k-1})} > 0
+\quad \text{for all } k.
+\]
+
+This shows that:
+\begin{itemize}
+  \item all pivots are strictly positive,
+  \item no division by zero can occur during LU decomposition.
+\end{itemize}
+
+\section*{Step 3: Suitability for the Recursive LU Strategy}
+
+The recursive LU algorithm computes:
+\[
+u_{kk} = a_{kk}^{(k)}, \quad
+l_{ik} = \frac{a_{ik}^{(k)}}{u_{kk}}.
+\]
+
+Since $u_{kk} > 0$ for all $k$:
+\begin{itemize}
+  \item each division is well-defined,
+  \item the recursive elimination proceeds safely without pivoting.
+\end{itemize}
+
+\section*{Step 4: Why Pivoting Is Unnecessary}
+
+Pivoting is used to:
+\begin{itemize}
+  \item avoid division by zero,
+  \item improve numerical stability.
+\end{itemize}
+
+For positive-definite matrices:
+\begin{itemize}
+  \item division by zero cannot occur,
+  \item pivots are guaranteed to be positive,
+  \item the matrix is well-conditioned in theory.
+\end{itemize}
+
+Thus, pivoting is unnecessary to ensure correctness.
+
+\section*{Relation to Numerical Stability}
+
+In numerical linear algebra, pivoting is often introduced not only to avoid
+division by zero but also to improve numerical stability by controlling the
+growth of rounding errors.
+
+For positive-definite matrices, the pivots in LU decomposition are guaranteed
+to be strictly positive and bounded away from zero. As a result:
+\begin{itemize}
+  \item division by zero cannot occur,
+  \item large element growth is avoided,
+  \item the amplification of rounding errors is limited.
+\end{itemize}
+
+Consequently, LU decomposition without pivoting is numerically stable for
+positive-definite matrices in exact arithmetic and performs reliably in
+floating-point computations.
+\section*{Worked Numerical Example}
+
+Consider the symmetric matrix:
+\[
+A =
+\begin{bmatrix}
+4 & 2 & 2 \\
+2 & 5 & 1 \\
+2 & 1 & 3
+\end{bmatrix}
+\]
+
+We first verify that $A$ is positive-definite. All leading principal minors are:
+\[
+\det(A_1) = 4 > 0,
+\quad
+\det(A_2) =
+\begin{vmatrix}
+4 & 2 \\
+2 & 5
+\end{vmatrix}
+= 16 > 0,
+\quad
+\det(A_3) = 36 > 0.
+\]
+
+Hence, $A$ is positive-definite.
+
+\subsection*{LU Decomposition Without Pivoting}
+
+Applying Gaussian elimination without pivoting:
+
+\[
+L =
+\begin{bmatrix}
+1 & 0 & 0 \\
+\frac{1}{2} & 1 & 0 \\
+\frac{1}{2} & 0 & 1
+\end{bmatrix},
+\quad
+U =
+\begin{bmatrix}
+4 & 2 & 2 \\
+0 & 4 & 0 \\
+0 & 0 & 2
+\end{bmatrix}
+\]
+
+All pivots ($4$, $4$, and $2$) are strictly positive, and no division by zero
+occurs. This confirms that LU decomposition proceeds safely without pivoting.
+\section*{Additional Insight: Relation to Cholesky Decomposition}
+
+Every positive-definite matrix admits a Cholesky decomposition:
+\[
+A = LL^{T},
+\]
+which is a special case of LU decomposition with
+\[
+U = L^{T}.
+\]
+
+In this case:
+\begin{itemize}
+  \item all pivots are square roots of positive numbers,
+  \item no pivoting is required.
+\end{itemize}
+
+This further reinforces that positive-definite matrices are inherently suitable
+for triangular factorizations.
+
+\section*{Comparison: LU vs Cholesky Decomposition}
+
+Both LU and Cholesky decompositions can be used for positive-definite matrices,
+but Cholesky decomposition is more specialized.
+
+\begin{itemize}
+  \item \textbf{LU Decomposition} applies to a broader class of matrices and
+        factors $A$ as $LU$.
+  \item \textbf{Cholesky Decomposition} applies only to symmetric
+        positive-definite matrices and factors $A$ as $LL^{T}$.
+\end{itemize}
+
+From a computational perspective:
+\begin{itemize}
+  \item Cholesky decomposition requires roughly half the number of arithmetic
+        operations compared to LU decomposition.
+  \item Cholesky is inherently stable and does not require pivoting.
+  \item LU decomposition without pivoting is safe for positive-definite
+        matrices but is less efficient than Cholesky.
+\end{itemize}
+
+Therefore, while positive-definite matrices admit LU decomposition without
+pivoting, Cholesky decomposition is generally preferred in practice.
+\section*{Final Conclusion}
+
+Positive-definite matrices admit LU decomposition without pivoting because:
+\begin{itemize}
+  \item all leading principal minors are strictly positive,
+  \item all pivots in Gaussian elimination are non-zero,
+  \item division by zero cannot occur in the recursive strategy.
+\end{itemize}
+
+\section*{Interpretation (Intuition)}
+
+Positive-definite matrices represent strictly convex quadratic forms. Eliminating
+variables never collapses dimensionality, and each step of Gaussian elimination
+preserves positivity. Hence, the algorithm proceeds safely without row exchanges.
+
+\subsection*{Remark}
+
+Positive-definite matrices arising from physical or optimization problems are
+often well-conditioned, which further enhances the numerical reliability of
+direct factorization methods.
+\end{document}

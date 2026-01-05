@@ -1,0 +1,277 @@
+\documentclass{article}
+
+% --------------------
+% Packages
+% --------------------
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+
+% --------------------
+% Page Layout
+% --------------------
+\geometry{
+  top=1in,
+  bottom=1in,
+  left=1in,
+  right=1in
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1em}
+
+% --------------------
+% Document
+% --------------------
+\begin{document}
+\vspace*{-1.5cm}
+
+% --------------------
+% Header Section
+% --------------------
+\hspace{0.7cm}
+\begin{minipage}[c]{0.7\textwidth}
+\vspace{0.5cm}
+\textbf{MTech CSE – 1st Semester} \\  
+Student ID: \textbf{A125023} \\  
+Student Name: \textbf{SRIJITA VERMA}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}{0.2\textwidth}
+\centering
+\includegraphics[width=0.6\linewidth]{college_logo.jpg}
+\end{minipage}
+
+\vspace{1cm}
+
+% --------------------
+% Question Section
+% --------------------
+\section*{Question}
+Define the class \textbf{Co-NP}. Explain the type of problems that belong to this
+complexity class.
+
+% --------------------
+% Answer Section
+% --------------------
+\section*{Answer}
+\section*{Preliminaries: Decision Problems and NP}
+
+In computational complexity theory, we primarily study \emph{decision problems},
+whose answers are either \textsc{YES} or \textsc{NO}.
+
+Recall that a decision problem $L$ belongs to the class $\mathbf{NP}$ if:
+\begin{itemize}
+  \item for every input $x \in L$ (a \textsc{YES}-instance),
+  \item there exists a certificate (or witness) that can be verified in
+  polynomial time by a deterministic Turing machine.
+\end{itemize}
+
+Thus, $\mathbf{NP}$ focuses on problems where \textsc{YES} answers are efficiently
+verifiable.
+
+\section*{Definition of the Class Co-NP}
+
+\subsection*{Formal Definition}
+
+A decision problem $L$ belongs to the class $\mathbf{Co\text{-}NP}$ if and only if
+its complement belongs to $\mathbf{NP}$.
+
+Formally,
+\[
+L \in \mathbf{Co\text{-}NP}
+\quad \Longleftrightarrow \quad
+\overline{L} \in \mathbf{NP},
+\]
+where
+\[
+\overline{L} = \{\, x \mid x \notin L \,\}.
+\]
+
+\subsection*{Equivalent Interpretation}
+
+A problem is in $\mathbf{Co\text{-}NP}$ if:
+\begin{itemize}
+  \item for every \textsc{NO}-instance, there exists a certificate,
+  \item that can be verified in polynomial time.
+\end{itemize}
+
+In other words, $\mathbf{Co\text{-}NP}$ is the class of problems whose \textsc{NO}
+answers are efficiently verifiable.
+
+\section*{Intuition Behind Co-NP}
+
+\begin{itemize}
+  \item $\mathbf{NP}$ problems: \emph{``If the answer is YES, I can quickly verify why.''}
+  \item $\mathbf{Co\text{-}NP}$ problems: \emph{``If the answer is NO, I can quickly verify why.''}
+\end{itemize}
+
+Co-NP captures problems where it is difficult to prove that something exists, but
+easy to prove that it does not exist.
+
+\section*{Relationship Between NP and Co-NP}
+
+Every problem in $\mathbf{P}$ belongs to both $\mathbf{NP}$ and $\mathbf{Co\text{-}NP}$:
+\[
+\mathbf{P} \subseteq \mathbf{NP} \cap \mathbf{Co\text{-}NP}.
+\]
+
+It is unknown whether:
+\[
+\mathbf{NP} = \mathbf{Co\text{-}NP}.
+\]
+
+Most complexity theorists believe:
+\[
+\mathbf{NP} \neq \mathbf{Co\text{-}NP},
+\]
+although this has not been proven. This question is closely related to the famous
+$\mathbf{P}$ vs.\ $\mathbf{NP}$ problem.
+
+\section*{Comparison of Complexity Classes: P, NP, and Co-NP}
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Class} & \textbf{Certificate Verified} & \textbf{Verification Time} & \textbf{Example Problem} \\
+\hline
+P & YES or NO & Polynomial & Shortest Path \\
+\hline
+NP & YES instance & Polynomial & SAT \\
+\hline
+Co-NP & NO instance & Polynomial & UNSAT \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection*{Interpretation}
+
+\begin{itemize}
+  \item Problems in \textbf{P} can be solved directly in polynomial time.
+  \item Problems in \textbf{NP} may be hard to solve, but YES answers are easy to verify.
+  \item Problems in \textbf{Co-NP} may be hard to solve, but NO answers are easy to verify.
+\end{itemize}
+\section*{Types of Problems in Co-NP}
+
+Problems in $\mathbf{Co\text{-}NP}$ typically involve \emph{universal claims}, such as:
+\begin{itemize}
+  \item ``No solution exists,''
+  \item ``Every possible configuration satisfies a property,''
+  \item ``A structure is valid for all cases.''
+\end{itemize}
+
+These problems are often complements of well-known $\mathbf{NP}$ problems.
+
+\section*{Canonical Examples of Co-NP Problems}
+
+\subsection*{TAUTOLOGY}
+
+\textbf{Problem:} Given a Boolean formula $\varphi$, is $\varphi$ true under all
+truth assignments?
+
+The complement of this problem is \textsc{SAT}. Since \textsc{SAT} is in
+$\mathbf{NP}$, \textsc{TAUTOLOGY} is in $\mathbf{Co\text{-}NP}$ and is
+$\mathbf{Co\text{-}NP}$-complete.
+
+\subsection*{UNSAT (Unsatisfiability)}
+
+\textbf{Problem:} Given a Boolean formula $\varphi$, is it unsatisfiable?
+
+Since \textsc{UNSAT} is the complement of \textsc{SAT}, and \textsc{SAT} is
+$\mathbf{NP}$-complete, \textsc{UNSAT} is $\mathbf{Co\text{-}NP}$-complete.
+
+\subsection*{Graph Non-Hamiltonicity}
+
+\textbf{Problem:} Given a graph $G$, does $G$ not contain a Hamiltonian cycle?
+
+The Hamiltonian Cycle problem is $\mathbf{NP}$-complete, hence its complement lies
+in $\mathbf{Co\text{-}NP}$.
+
+\subsection*{Composite Number Verification}
+
+\textbf{Problem:} Given a number $n$, is $n$ composite?
+
+This problem is in $\mathbf{NP}$ (a non-trivial factor is a certificate). Its
+complement, primality testing, lies in $\mathbf{Co\text{-}NP}$ and is also known to
+be in $\mathbf{P}$.
+
+\section*{Co-NP-Complete Problems}
+
+A problem $L$ is $\mathbf{Co\text{-}NP}$-complete if:
+\begin{itemize}
+  \item $L \in \mathbf{Co\text{-}NP}$, and
+  \item every problem in $\mathbf{Co\text{-}NP}$ can be reduced to $L$ in polynomial
+  time.
+\end{itemize}
+
+Examples include:
+\begin{itemize}
+  \item \textsc{TAUTOLOGY},
+  \item \textsc{UNSAT}.
+\end{itemize}
+
+\section*{How Co-NP-Completeness Is Proved}
+
+To prove that a problem $L$ is \textbf{Co-NP-complete}, two conditions must be
+satisfied:
+
+\subsection*{1. Membership in Co-NP}
+
+One must show that the complement problem $\overline{L}$ belongs to NP.
+Equivalently, there must exist a polynomial-time verifiable certificate for
+NO-instances of $L$.
+
+\subsection*{2. Co-NP-Hardness}
+
+One must show that every problem in Co-NP can be reduced to $L$ in polynomial
+time.
+
+In practice, this is done by:
+\begin{itemize}
+  \item taking a known Co-NP-complete problem (such as UNSAT),
+  \item giving a polynomial-time reduction from it to $L$.
+\end{itemize}
+
+\subsection*{Key Observation}
+
+Since Co-NP problems are complements of NP problems, Co-NP-completeness proofs
+often rely on known NP-completeness results by complementing both the problem
+and the reduction.
+
+For example:
+\begin{itemize}
+  \item SAT is NP-complete,
+  \item UNSAT is therefore Co-NP-complete.
+\end{itemize}
+\section*{Structural Properties of Co-NP}
+
+\begin{itemize}
+  \item $\mathbf{Co\text{-}NP}$ is closed under complement by definition.
+  \item It is not known to be closed under union or intersection.
+  \item If $\mathbf{NP} = \mathbf{Co\text{-}NP}$, the polynomial hierarchy collapses.
+\end{itemize}
+
+\section*{Final Conclusion}
+
+$\mathbf{Co\text{-}NP}$ is the class of decision problems whose \textsc{NO}-instances
+have polynomial-time verifiable certificates.
+
+In summary:
+\begin{itemize}
+  \item $\mathbf{Co\text{-}NP}$ consists of complements of $\mathbf{NP}$ problems,
+  \item it captures problems with efficiently verifiable non-existence proofs,
+  \item it contains problems such as \textsc{UNSAT} and \textsc{TAUTOLOGY},
+  \item whether $\mathbf{Co\text{-}NP} = \mathbf{NP}$ remains an open question.
+\end{itemize}
+
+
+\paragraph{Polynomial Hierarchy Remark.}
+If NP = Co-NP, then the polynomial hierarchy collapses to its first level.
+
+
+\section*{Intuition}
+
+$\mathbf{NP}$ verifies existence, whereas $\mathbf{Co\text{-}NP}$ verifies
+non-existence.
+\end{document}

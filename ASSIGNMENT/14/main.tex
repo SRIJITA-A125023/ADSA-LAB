@@ -1,0 +1,314 @@
+\documentclass{article}
+
+% --------------------
+% Packages
+% --------------------
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+
+% --------------------
+% Page Layout
+% --------------------
+\geometry{
+  top=1in,
+  bottom=1in,
+  left=1in,
+  right=1in
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1em}
+
+% --------------------
+% Document
+% --------------------
+\begin{document}
+\vspace*{-1.5cm}
+
+% --------------------
+% Header Section
+% --------------------
+\hspace{0.7cm}
+\begin{minipage}[c]{0.7\textwidth}
+\vspace{0.5cm}
+\textbf{MTech CSE – 1st Semester} \\  
+Student ID: \textbf{A125023} \\  
+Student Name: \textbf{SRIJITA VERMA}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}{0.2\textwidth}
+\centering
+\includegraphics[width=0.6\linewidth]{college_logo.jpg}
+\end{minipage}
+
+\vspace{1cm}
+
+% --------------------
+% Question Section
+% --------------------
+\section*{Question}
+
+Is the \textsc{2-SAT} problem NP-hard? Can it be solved in polynomial time?
+Explain your reasoning.
+
+% --------------------
+% Answer Section
+% --------------------
+\section*{Answer}
+\section*{Short Answer}
+
+The \textsc{2-SAT} problem is not NP-hard (unless $\mathbf{P}=\mathbf{NP}$).
+Moreover, \textsc{2-SAT} can be solved in polynomial time, and in fact in linear
+time, using graph-based algorithms such as implication graphs and strongly
+connected components (SCCs).
+
+\section*{What Is the 2-SAT Problem?}
+
+The \textsc{2-SAT} (2-CNF-SAT) problem is a restricted version of the Boolean
+satisfiability problem.
+
+A Boolean formula is in \emph{2-CNF} if:
+\begin{itemize}
+  \item it is in conjunctive normal form (CNF), and
+  \item each clause contains at most two literals.
+\end{itemize}
+
+For example:
+\[
+(x_1 \vee \neg x_2)
+\;\wedge\;
+(\neg x_1 \vee x_3)
+\;\wedge\;
+(x_2 \vee x_3).
+\]
+
+The problem asks whether there exists a truth assignment to the variables that
+satisfies all clauses.
+
+\section*{Is 2-SAT NP-Hard?}
+
+\subsection*{Key Fact}
+
+\textsc{2-SAT} is not NP-hard unless $\mathbf{P}=\mathbf{NP}$.
+
+\subsection*{Reasoning}
+
+The general \textsc{SAT} problem is NP-complete, and the restricted
+\textsc{3-SAT} problem is also NP-complete. However, \textsc{2-SAT} is a strictly
+easier special case.
+
+If \textsc{2-SAT} were NP-hard, then since \textsc{2-SAT} can be solved in
+polynomial time, every problem in $\mathbf{NP}$ would also be solvable in
+polynomial time. This would imply:
+\[
+\mathbf{P} = \mathbf{NP},
+\]
+which is widely believed to be false. Hence, \textsc{2-SAT} is not NP-hard.
+
+\section*{Polynomial-Time Solvability of 2-SAT}
+
+\subsection*{Efficiency}
+
+\textsc{2-SAT} can be solved in:
+\[
+O(n + m)
+\]
+time, where:
+\begin{itemize}
+  \item $n$ is the number of variables,
+  \item $m$ is the number of clauses.
+\end{itemize}
+
+This efficiency is achieved using graph algorithms.
+
+\section*{Implication Graph Formulation}
+
+Each 2-CNF clause
+\[
+(a \vee b)
+\]
+is logically equivalent to:
+\[
+(\neg a \Rightarrow b) \;\wedge\; (\neg b \Rightarrow a).
+\]
+
+\subsection*{Graph Construction}
+
+Construct a directed graph with:
+\begin{itemize}
+  \item one node for each literal $x$ and $\neg x$,
+  \item for each clause $(a \vee b)$, add edges:
+  \[
+  \neg a \rightarrow b
+  \quad \text{and} \quad
+  \neg b \rightarrow a.
+  \]
+\end{itemize}
+
+This graph is called the \emph{implication graph}.
+
+\section*{Strongly Connected Components Criterion}
+
+\subsection*{Key Theorem}
+
+A 2-SAT formula is satisfiable if and only if, for no variable $x$, both $x$ and
+$\neg x$ belong to the same strongly connected component of the implication
+graph.
+
+\subsection*{Explanation}
+
+If $x \Rightarrow \neg x$ and $\neg x \Rightarrow x$, then assigning either truth
+value to $x$ leads to a contradiction. Hence, no satisfying assignment exists.
+
+\section*{Algorithm Outline}
+
+\begin{itemize}
+  \item Build the implication graph from the formula.
+  \item Compute strongly connected components using Kosaraju’s or Tarjan’s
+  algorithm.
+  \item For each variable $x$:
+  \begin{itemize}
+    \item if $x$ and $\neg x$ lie in the same SCC, the formula is unsatisfiable;
+    \item otherwise, the formula is satisfiable and a valid assignment can be
+    constructed.
+  \end{itemize}
+\end{itemize}
+
+All steps run in linear time.
+
+\section*{Worked Example: Solving 2-SAT Using an Implication Graph}
+
+Consider the 2-CNF formula:
+\[
+\varphi =
+(x_1 \vee x_2)
+\;\wedge\;
+(\neg x_1 \vee x_3)
+\;\wedge\;
+(\neg x_2 \vee \neg x_3).
+\]
+
+We determine whether this formula is satisfiable using the implication graph
+method.
+
+\section*{Conversion of Clauses into Implications}
+
+Each clause of the form $(a \vee b)$ is logically equivalent to:
+\[
+(\neg a \Rightarrow b) \;\wedge\; (\neg b \Rightarrow a).
+\]
+
+Applying this transformation to each clause:
+
+\begin{itemize}
+  \item $(x_1 \vee x_2)$ yields:
+  \[
+  \neg x_1 \Rightarrow x_2,
+  \quad
+  \neg x_2 \Rightarrow x_1.
+  \]
+
+  \item $(\neg x_1 \vee x_3)$ yields:
+  \[
+  x_1 \Rightarrow x_3,
+  \quad
+  \neg x_3 \Rightarrow \neg x_1.
+  \]
+
+  \item $(\neg x_2 \vee \neg x_3)$ yields:
+  \[
+  x_2 \Rightarrow \neg x_3,
+  \quad
+  x_3 \Rightarrow \neg x_2.
+  \]
+\end{itemize}
+
+\section*{Construction of the Implication Graph}
+
+The vertices of the implication graph correspond to the literals:
+\[
+\{\, x_1, \neg x_1, x_2, \neg x_2, x_3, \neg x_3 \,\}.
+\]
+
+The directed edges represent the implications derived above:
+\[
+\neg x_1 \rightarrow x_2,
+\quad
+\neg x_2 \rightarrow x_1,
+\quad
+x_1 \rightarrow x_3,
+\quad
+\neg x_3 \rightarrow \neg x_1,
+\quad
+x_2 \rightarrow \neg x_3,
+\quad
+x_3 \rightarrow \neg x_2.
+\]
+
+\section*{Analysis Using Strongly Connected Components}
+
+We now compute the strongly connected components (SCCs) of the implication
+graph.
+
+For each variable $x_i$, we check whether the literals $x_i$ and $\neg x_i$
+belong to the same SCC. If they do, the formula is unsatisfiable.
+
+In this implication graph:
+\begin{itemize}
+  \item no variable and its negation appear in the same strongly connected
+  component.
+\end{itemize}
+
+\section*{Conclusion for the Example}
+
+Since no variable $x_i$ and its negation $\neg x_i$ lie in the same SCC, the
+formula $\varphi$ is satisfiable.
+
+A satisfying assignment can be constructed by assigning truth values according to
+the topological order of the SCC condensation graph.
+\section*{Why 2-SAT Is Easier Than 3-SAT}
+
+The key difference lies in structure:
+\begin{itemize}
+  \item 2-SAT constraints form implications that can be analyzed using graph
+  reachability.
+  \item 3-SAT constraints create complex combinatorial interactions that cannot
+  be captured by simple implication graphs.
+\end{itemize}
+
+Thus, \textsc{2-SAT} admits a global consistency check via SCCs, while
+\textsc{3-SAT} remains NP-complete.
+
+\section*{Complexity-Theoretic Classification}
+
+\[
+\begin{array}{|c|c|c|c|}
+\hline
+\textbf{Problem} & \textbf{In P} & \textbf{NP-Hard} & \textbf{NP-Complete} \\
+\hline
+\textsc{SAT} & \text{No} & \text{Yes} & \text{Yes} \\
+\textsc{3-SAT} & \text{No} & \text{Yes} & \text{Yes} \\
+\textsc{2-SAT} & \text{Yes} & \text{No} & \text{No} \\
+\hline
+\end{array}
+\]
+
+\section*{Final Conclusion}
+
+\textsc{2-SAT} is not NP-hard (unless $\mathbf{P}=\mathbf{NP}$).  
+It can be solved in polynomial time, and in fact in linear time, using implication
+graphs and strongly connected components.
+
+This makes \textsc{2-SAT} a classic example of how restricting problem structure
+can dramatically reduce computational complexity.
+
+\section*{Intuition}
+
+2-SAT constraints behave like logical implications that must all be mutually
+consistent. Graph reachability is sufficient to detect contradictions. In
+contrast, 3-SAT allows richer interactions that require exponential search in
+the worst case.
+
+\end{document}

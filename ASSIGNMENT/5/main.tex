@@ -1,0 +1,334 @@
+\documentclass{article}
+
+% --------------------
+% Packages
+% --------------------
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+
+% --------------------
+% Page Layout
+% --------------------
+\geometry{
+  top=1in,
+  bottom=1in,
+  left=1in,
+  right=1in
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1em}
+
+% --------------------
+% Document
+% --------------------
+\begin{document}
+\vspace*{-1.5cm}
+
+% --------------------
+% Header Section
+% --------------------
+\hspace{0.7cm}
+\begin{minipage}[c]{0.7\textwidth}
+\vspace{0.5cm}
+\textbf{MTech CSE – 1st Semester} \\  
+Student ID: \textbf{A125023} \\  
+Student Name: \textbf{SRIJITA VERMA}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}{0.2\textwidth}
+\centering
+\includegraphics[width=0.6\linewidth]{college_logo.jpg}
+\end{minipage}
+
+\vspace{1cm}
+
+% --------------------
+% Question Section
+% --------------------
+\section*{Question}
+
+Solve the following recurrence relation arising from the LUP decomposition
+solve procedure:
+\[
+T(n) = \sum_{i=1}^{n} \left[ O(1) + \sum_{j=1}^{i-1} O(1) \right]
+       + \sum_{i=1}^{n} \left[ O(1) + \sum_{j=i+1}^{n} O(1) \right].
+\]
+
+% --------------------
+% Answer Section
+% --------------------
+\section*{Answer}
+\section*{Step 1: Interpret the Recurrence}
+
+The recurrence consists of two main summations, each iterating over
+$i = 1$ to $n$.
+
+Each part models the cost of:
+\begin{itemize}
+  \item constant-time operations, and
+  \item inner loops that perform a constant-time operation multiple times.
+\end{itemize}
+
+Our goal is to count the total number of constant-time operations and determine
+the overall asymptotic complexity.
+
+\section*{Step 2: Simplify the First Summation}
+
+Consider the first term:
+\[
+\sum_{i=1}^{n} \left[ O(1) + \sum_{j=1}^{i-1} O(1) \right].
+\]
+
+\subsection*{Inner Summation}
+
+The inner sum
+\[
+\sum_{j=1}^{i-1} O(1)
+\]
+executes $i-1$ times. Hence:
+\[
+\sum_{j=1}^{i-1} O(1) = O(i).
+\]
+
+\subsection*{First Summation Becomes}
+
+\[
+\sum_{i=1}^{n} \left[ O(1) + O(i) \right]
+= \sum_{i=1}^{n} O(i).
+\]
+
+\section*{Step 3: Evaluate the First Summation}
+
+We know that:
+\[
+\sum_{i=1}^{n} i = \frac{n(n+1)}{2}.
+\]
+
+Therefore:
+\[
+\sum_{i=1}^{n} O(i) = O(n^2).
+\]
+
+\section*{Step 4: Simplify the Second Summation}
+
+Now consider the second term:
+\[
+\sum_{i=1}^{n} \left[ O(1) + \sum_{j=i+1}^{n} O(1) \right].
+\]
+
+\subsection*{Inner Summation}
+
+The inner sum
+\[
+\sum_{j=i+1}^{n} O(1)
+\]
+executes $n-i$ times. Hence:
+\[
+\sum_{j=i+1}^{n} O(1) = O(n-i).
+\]
+
+\subsection*{Second Summation Becomes}
+
+\[
+\sum_{i=1}^{n} \left[ O(1) + O(n-i) \right]
+= \sum_{i=1}^{n} O(n-i).
+\]
+
+\section*{Step 5: Evaluate the Second Summation}
+
+As $i$ ranges from $1$ to $n$, the quantity $n-i$ ranges from $n-1$ down to $0$.
+Thus:
+\[
+\sum_{i=1}^{n} (n-i) = \sum_{k=0}^{n-1} k = \frac{n(n-1)}{2}.
+\]
+
+Therefore:
+\[
+\sum_{i=1}^{n} O(n-i) = O(n^2).
+\]
+
+\section*{Step 6: Combine Both Parts}
+
+From the above steps:
+\begin{itemize}
+  \item The first summation contributes $O(n^2)$,
+  \item The second summation contributes $O(n^2)$.
+\end{itemize}
+
+Hence:
+\[
+T(n) = O(n^2) + O(n^2) = O(n^2).
+\]
+
+\section*{Final Answer}
+
+\[
+\boxed{T(n) = O(n^2)}
+\]
+
+\paragraph{Comparison with LUP Decomposition Cost.}
+While the LUP decomposition itself requires $O(n^3)$ time, the solve phase
+analyzed here runs in $O(n^2)$ time, making it efficient when solving linear
+systems with multiple right-hand sides once the factorization has been computed.
+
+\section*{Relation to LUP Solve Algorithm (Pseudocode)}
+
+The recurrence corresponds to the solve phase of the LUP decomposition, which
+consists of forward and backward substitution.
+
+\subsection*{Forward Substitution (Solving $Ly = Pb$)}
+
+\begin{verbatim}
+for i = 1 to n:
+    y[i] = b[i]
+    for j = 1 to i-1:
+        y[i] = y[i] - L[i][j] * y[j]
+\end{verbatim}
+
+The outer loop runs $n$ times, and the inner loop executes $i-1$ constant-time
+operations, giving rise to the summation
+\[
+\sum_{i=1}^{n} \left[ O(1) + \sum_{j=1}^{i-1} O(1) \right].
+\]
+
+\subsection*{Backward Substitution (Solving $Ux = y$)}
+
+\begin{verbatim}
+for i = n down to 1:
+    x[i] = y[i]
+    for j = i+1 to n:
+        x[i] = x[i] - U[i][j] * x[j]
+\end{verbatim}
+
+Here, the inner loop executes $n-i$ constant-time operations, producing the
+summation
+\[
+\sum_{i=1}^{n} \left[ O(1) + \sum_{j=i+1}^{n} O(1) \right].
+\]
+
+Together, these two procedures account for the full recurrence analyzed above.
+\section*{Relation to LUP Solve Algorithm (Pseudocode Interpretation)}
+The recurrence solved earlier corresponds to the \emph{solve phase} after LUP
+decomposition, not to the decomposition itself. This solve phase consists of two
+steps:
+\begin{itemize}
+  \item Forward substitution to solve $Ly = Pb$,
+  \item Backward substitution to solve $Ux = y$.
+\end{itemize}
+
+Below, we present the pseudocode-level interpretation and show how each loop
+maps directly to the recurrence relation.
+
+\section*{Forward Substitution (Lower Triangular Solve)}
+
+\subsection*{Pseudocode}
+
+\begin{verbatim}
+for i = 1 to n:
+    y[i] = b[i]
+    for j = 1 to i-1:
+        y[i] = y[i] - L[i][j] * y[j]
+\end{verbatim}
+
+\subsection*{Cost Analysis}
+
+\begin{itemize}
+  \item The outer loop runs $n$ times.
+  \item The inner loop runs $i-1$ times for a given $i$.
+  \item Each inner operation takes $O(1)$ time.
+\end{itemize}
+
+Thus, the total cost of forward substitution is:
+\[
+\sum_{i=1}^{n} \left[ O(1) + \sum_{j=1}^{i-1} O(1) \right],
+\]
+which matches the first summation in the recurrence.
+
+\section*{Backward Substitution (Upper Triangular Solve)}
+
+\subsection*{Pseudocode}
+
+\begin{verbatim}
+for i = n down to 1:
+    x[i] = y[i]
+    for j = i+1 to n:
+        x[i] = x[i] - U[i][j] * x[j]
+\end{verbatim}
+
+\subsection*{Cost Analysis}
+
+\begin{itemize}
+  \item The outer loop runs $n$ times.
+  \item The inner loop runs $n-i$ times for a given $i$.
+  \item Each inner operation takes $O(1)$ time.
+\end{itemize}
+
+Thus, the total cost of backward substitution is:
+\[
+\sum_{i=1}^{n} \left[ O(1) + \sum_{j=i+1}^{n} O(1) \right],
+\]
+which matches the second summation in the recurrence.
+
+\section*{Combined Interpretation}
+
+Combining both phases, the total running time of the LUP solve procedure is:
+\[
+T(n)
+=
+\sum_{i=1}^{n} \left[ O(1) + \sum_{j=1}^{i-1} O(1) \right]
++
+\sum_{i=1}^{n} \left[ O(1) + \sum_{j=i+1}^{n} O(1) \right].
+\]
+
+This recurrence therefore represents exactly the combined cost of:
+\begin{itemize}
+  \item Forward substitution, and
+  \item Backward substitution.
+\end{itemize}
+
+As shown earlier, this simplifies to:
+\[
+T(n) = O(n^2).
+\]
+
+\section*{Result}
+
+The recurrence arises directly from the nested-loop structure of forward and
+backward substitution in the LUP solve procedure. This confirms that, while the
+LUP decomposition itself requires $O(n^3)$ time, each subsequent solve step
+runs in quadratic time.
+
+\paragraph{Practical Efficiency.}
+Both forward and backward substitution access matrix entries in a largely
+sequential manner, which leads to good cache locality in practice. This memory
+access pattern further contributes to their efficiency beyond the quadratic
+asymptotic time complexity.
+
+\section*{Interpretation in the Context of LUP Decomposition}
+
+This recurrence corresponds to the forward substitution and backward substitution
+steps used when solving:
+\[
+Ax = b \quad \text{using} \quad PA = LU.
+\]
+
+The key insight is:
+\begin{itemize}
+  \item LUP decomposition itself takes $O(n^3)$ time,
+  \item Once $L$ and $U$ are available, each solve step (forward and backward
+        substitution) takes $O(n^2)$ time.
+\end{itemize}
+
+This confirms that the solve phase is quadratic, not cubic.
+
+\section*{Conclusion}
+
+The given recurrence simplifies to a quadratic time complexity. This aligns with
+the theoretical expectation for forward and backward substitution in LUP-based
+linear system solvers, where nested loops execute a linear number of constant-time
+operations.
+
+\end{document}

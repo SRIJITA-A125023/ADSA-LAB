@@ -1,0 +1,311 @@
+\documentclass{article}
+
+% --------------------
+% Packages
+% --------------------
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+
+% --------------------
+% Page Layout
+% --------------------
+\geometry{
+  top=1in,
+  bottom=1in,
+  left=1in,
+  right=1in
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1em}
+
+% --------------------
+% Document
+% --------------------
+\begin{document}
+\vspace*{-1.5cm}
+
+% --------------------
+% Header Section
+% --------------------
+\hspace{0.7cm}
+\begin{minipage}[c]{0.7\textwidth}
+\vspace{0.5cm}
+\textbf{MTech CSE – 1st Semester} \\  
+Student ID: \textbf{A125023} \\  
+Student Name: \textbf{SRIJITA VERMA}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}{0.2\textwidth}
+\centering
+\includegraphics[width=0.6\linewidth]{college_logo.jpg}
+\end{minipage}
+
+\vspace{1cm}
+
+% --------------------
+% Question Section
+% --------------------
+\section*{Question}
+Prove that every connected component of the symmetric difference of two
+matchings in a graph $G$ is either a path or an even-length cycle.
+
+% --------------------
+% Answer Section
+% --------------------
+\section*{Answer}
+\section*{Preliminaries and Definitions}
+
+Let $G = (V,E)$ be an undirected graph.
+
+\subsection*{Definition 1: Matching}
+
+A matching $M \subseteq E$ is a set of edges such that no two edges in $M$ share a
+common endpoint.
+
+Let $M_1$ and $M_2$ be two matchings in $G$.
+
+\subsection*{Definition 2: Symmetric Difference}
+
+The symmetric difference of $M_1$ and $M_2$ is defined as:
+\[
+M_1 \oplus M_2 = (M_1 \setminus M_2) \cup (M_2 \setminus M_1).
+\]
+
+That is, $M_1 \oplus M_2$ consists of edges that belong to exactly one of the two
+matchings.
+
+\section*{Goal}
+
+We must show that every connected component of the graph
+\[
+H = (V,\, M_1 \oplus M_2)
+\]
+is either:
+\begin{itemize}
+  \item a path, or
+  \item a cycle of even length.
+\end{itemize}
+
+\section*{Key Observations}
+
+\subsection*{Observation 1: Degree Bound}
+
+Fix any vertex $v \in V$.
+
+Since $M_1$ is a matching, at most one edge of $M_1$ is incident to $v$.
+Since $M_2$ is a matching, at most one edge of $M_2$ is incident to $v$.
+
+Therefore, in the symmetric difference $M_1 \oplus M_2$,
+\[
+\deg_H(v) \le 2.
+\]
+
+\subsection*{Observation 2: Structure of Graphs with Maximum Degree 2}
+
+Any graph in which every vertex has degree at most $2$ consists of connected
+components that are:
+\begin{itemize}
+  \item paths, or
+  \item cycles.
+\end{itemize}
+
+Thus, each connected component of $H$ must be either a path or a cycle. It
+remains to prove that every cycle has even length.
+
+\section*{Alternating Structure of the Symmetric Difference}
+
+\subsection*{Observation 3: Alternation of Edges}
+
+Consider any vertex $v$ with $\deg_H(v) = 2$.
+
+One incident edge must belong to $M_1$, and the other must belong to $M_2$.
+This is because no matching can contribute more than one incident edge at $v$.
+
+Hence, along any connected component of $H$, edges alternate between:
+\[
+M_1,\, M_2,\, M_1,\, M_2,\, \ldots
+\]
+
+\section*{Analysis of Connected Components}
+
+\subsection*{Case 1: The Component Is a Path}
+
+If a connected component contains a vertex of degree $1$, then it is a path.
+Such a path may start and end at vertices that are unmatched in one or both
+matchings.
+
+No restriction is imposed on the length of such a path. Hence, paths are valid
+connected components.
+
+\subsection*{Case 2: The Component Is a Cycle}
+
+Suppose a connected component is a cycle. Then every vertex on the cycle has
+degree exactly $2$.
+
+Edges on the cycle alternate between $M_1$ and $M_2$. Let the cycle have length
+$k$.
+
+Since the edges alternate, exactly half of the edges belong to $M_1$ and half to
+$M_2$. This is possible only if $k$ is even.
+
+Therefore, every cycle in $M_1 \oplus M_2$ has even length.
+
+\section*{Final Conclusion}
+
+We have shown that:
+\begin{itemize}
+  \item every vertex in $M_1 \oplus M_2$ has degree at most $2$,
+  \item hence, every connected component is either a path or a cycle,
+  \item all cycles must be of even length due to edge alternation.
+\end{itemize}
+
+Thus, every connected component of $M_1 \oplus M_2$ is either a path or an
+even-length cycle.
+
+\section*{Worked Example (Textual Diagram)}
+
+Consider the graph with vertices:
+\[
+V = \{a, b, c, d, e\}.
+\]
+
+Let the two matchings be:
+\[
+M_1 = \{(a,b), (c,d)\}, \quad
+M_2 = \{(b,c), (d,e)\}.
+\]
+
+\subsection*{Textual Diagram Representation}
+
+We describe the graph structure textually:
+
+\begin{center}
+$a$ --- $b$ --- $c$ --- $d$ --- $e$
+\end{center}
+
+Edges in the matchings:
+\begin{itemize}
+  \item Edges in $M_1$: $(a,b)$ and $(c,d)$,
+  \item Edges in $M_2$: $(b,c)$ and $(d,e)$.
+\end{itemize}
+
+The symmetric difference is:
+\[
+M_1 \oplus M_2 = \{(a,b), (b,c), (c,d), (d,e)\}.
+\]
+
+\subsection*{Resulting Component}
+
+The symmetric difference forms a single connected component:
+\[
+a \rightarrow b \rightarrow c \rightarrow d \rightarrow e,
+\]
+which is a \emph{path}.
+
+The edges alternate between $M_1$ and $M_2$:
+\[
+M_1,\, M_2,\, M_1,\, M_2.
+\]
+
+This example illustrates how a connected component of the symmetric difference
+can form a path with alternating edges.
+\section*{Worked Example (Even-Length Cycle)}
+
+Consider the graph with vertices:
+\[
+V = \{v_1, v_2, v_3, v_4\}.
+\]
+
+Let the two matchings be:
+\[
+M_1 = \{(v_1,v_2), (v_3,v_4)\}, \quad
+M_2 = \{(v_2,v_3), (v_4,v_1)\}.
+\]
+
+\subsection*{Textual Diagram Representation}
+
+The graph can be described as a cycle:
+\begin{center}
+$v_1$ --- $v_2$ --- $v_3$ --- $v_4$ --- $v_1$
+\end{center}
+
+Edges alternate between the two matchings around the cycle.
+
+\subsection*{Symmetric Difference}
+
+Since no edge is common to both matchings, the symmetric difference is:
+\[
+M_1 \oplus M_2 =
+\{(v_1,v_2), (v_2,v_3), (v_3,v_4), (v_4,v_1)\}.
+\]
+
+This forms a single connected component that is a cycle of length $4$.
+
+\subsection*{Observation}
+
+The edges alternate between $M_1$ and $M_2$, and the cycle length is even. This
+illustrates the second possible structure of a connected component in the
+symmetric difference.
+\section*{Relation to Augmenting Paths and Maximum Matching}
+
+This structural result has a direct and fundamental connection to augmenting
+paths in matching theory.
+
+Let $M$ be a matching and $M^\ast$ be a maximum matching in a graph $G$. Consider
+the symmetric difference:
+\[
+M \oplus M^\ast.
+\]
+
+By the result proved above, every connected component of $M \oplus M^\ast$ is
+either a path or an even-length cycle with alternating edges.
+
+\subsection*{Augmenting Paths}
+
+An \emph{augmenting path} is a path that:
+\begin{itemize}
+  \item starts and ends at vertices unmatched by $M$,
+  \item alternates between edges not in $M$ and edges in $M$,
+  \item begins and ends with edges not in $M$.
+\end{itemize}
+
+In $M \oplus M^\ast$, such augmenting paths correspond exactly to path components
+whose endpoints are unmatched in $M$.
+
+Flipping the matching along such a path increases the size of the matching by
+one.
+
+\subsection*{Even-Length Cycles}
+
+Even-length cycle components in $M \oplus M^\ast$:
+\begin{itemize}
+  \item alternate between $M$ and $M^\ast$,
+  \item do not change the size of the matching when flipped,
+  \item represent different but equally sized matchings.
+\end{itemize}
+
+Thus:
+\begin{itemize}
+  \item path components explain how a matching can be improved,
+  \item cycle components explain structural differences between maximum
+        matchings.
+\end{itemize}
+
+This decomposition underlies the correctness of classical matching algorithms,
+including augmenting-path-based algorithms for maximum matching.
+
+
+\section*{Intuition}
+
+Matchings pair vertices without overlap. Taking the symmetric difference
+highlights exactly where the two matchings disagree. At these disagreement
+points, edges alternate cleanly between the two matchings, forcing the structure
+to be either paths or even cycles—and nothing else.
+\subsection*{Remark (Bipartite Graphs)}
+In bipartite graphs, all alternating cycles are even, which aligns naturally with
+the structure of the symmetric difference.
+
+\end{document}

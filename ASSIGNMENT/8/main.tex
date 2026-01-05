@@ -1,0 +1,282 @@
+\documentclass{article}
+
+% --------------------
+% Packages
+% --------------------
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+
+% --------------------
+% Page Layout
+% --------------------
+\geometry{
+  top=1in,
+  bottom=1in,
+  left=1in,
+  right=1in
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1em}
+
+% --------------------
+% Document
+% --------------------
+\begin{document}
+\vspace*{-1.5cm}
+
+% --------------------
+% Header Section
+% --------------------
+\hspace{0.7cm}
+\begin{minipage}[c]{0.7\textwidth}
+\vspace{0.5cm}
+\textbf{MTech CSE – 1st Semester} \\  
+Student ID: \textbf{A125023} \\  
+Student Name: \textbf{SRIJITA VERMA}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}{0.2\textwidth}
+\centering
+\includegraphics[width=0.6\linewidth]{college_logo.jpg}
+\end{minipage}
+
+\vspace{1cm}
+
+% --------------------
+% Question Section
+% --------------------
+\section*{Question}
+
+For finding an augmenting path in a graph, should Breadth-First Search (BFS) or
+Depth-First Search (DFS) be applied? Justify your answer.
+% --------------------
+% Answer Section
+% --------------------
+\section*{Answer}
+\section*{Short Answer}
+
+Breadth First Search (BFS) should be applied when finding augmenting paths in the
+context of network flow algorithms, particularly in the Edmonds--Karp algorithm.
+
+Although Depth First Search (DFS) can be used to find augmenting paths, BFS is
+preferred because it guarantees shortest augmenting paths, ensures
+polynomial-time complexity, and avoids pathological performance cases.
+
+\section*{Background: Augmenting Paths in Flow Networks}
+
+An augmenting path is a path from the source to the sink in the residual graph
+along which additional flow can be pushed.
+
+Augmenting paths are central to:
+\begin{itemize}
+  \item the Ford--Fulkerson method,
+  \item the Edmonds--Karp algorithm,
+  \item maximum flow computation.
+\end{itemize}
+
+The choice of how augmenting paths are found (BFS vs.\ DFS) directly affects
+correctness guarantees and time complexity.
+
+\section*{BFS vs DFS: Conceptual Comparison}
+
+\subsection*{Depth First Search (DFS)}
+
+\begin{itemize}
+  \item Explores one path as deeply as possible before backtracking.
+  \item May find very long or inefficient augmenting paths.
+  \item The choice of path depends heavily on traversal order.
+  \item Does not guarantee the shortest augmenting path.
+\end{itemize}
+
+\subsection*{Breadth First Search (BFS)}
+
+\begin{itemize}
+  \item Explores paths in increasing order of length (number of edges).
+  \item Always finds the shortest augmenting path.
+  \item Uses systematic, level-by-level exploration.
+  \item Exhibits predictable and stable behavior.
+\end{itemize}
+
+\section*{Why BFS Is Preferred for Finding Augmenting Paths}
+
+\subsection*{1. Shortest Augmenting Path Property}
+
+When BFS is used on the residual graph, the first time the sink is reached, the
+path found has the minimum number of edges. Shorter augmenting paths reduce the
+number of augmentations required.
+
+This property is essential in the Edmonds--Karp algorithm.
+
+\subsection*{2. Guaranteed Polynomial-Time Complexity}
+
+Using DFS in the Ford--Fulkerson method can lead to exponential time complexity
+in the worst case. In contrast, using BFS guarantees a polynomial-time bound.
+
+Specifically, the Edmonds--Karp algorithm runs in:
+\[
+O(VE^2)
+\]
+time, where $V$ is the number of vertices and $E$ is the number of edges.
+
+\subsection*{3. Avoidance of Bad Augmenting Paths}
+
+DFS may:
+\begin{itemize}
+  \item repeatedly push small amounts of flow,
+  \item undo previous flow decisions,
+  \item become trapped in inefficient augmentations.
+\end{itemize}
+
+BFS avoids these issues by:
+\begin{itemize}
+  \item making steady progress using shortest paths,
+  \item ensuring that the distance from source to sink never decreases.
+\end{itemize}
+
+\subsection*{4. Theoretical Guarantee of Termination}
+
+With BFS:
+\begin{itemize}
+  \item each edge can become critical only a bounded number of times,
+  \item the level of the sink strictly increases after enough augmentations.
+\end{itemize}
+
+This provides a provable upper bound on the number of iterations.
+
+\section*{Illustrative Example: BFS vs DFS for Augmenting Paths}
+
+Consider the following flow network:
+
+\[
+s \rightarrow v_1 \rightarrow v_2 \rightarrow t
+\]
+\[
+s \rightarrow v_3 \rightarrow t
+\]
+
+Assume all edges have unit capacity.
+
+\subsection*{Using DFS}
+
+A depth-first search may discover the augmenting path:
+\[
+s \rightarrow v_1 \rightarrow v_2 \rightarrow t
+\]
+which has length 3.
+
+After pushing one unit of flow, DFS may repeatedly explore long paths or undo
+previous choices before discovering alternative shorter routes.
+
+\subsection*{Using BFS}
+
+Breadth-first search explores the graph level by level and finds the augmenting
+path:
+\[
+s \rightarrow v_3 \rightarrow t
+\]
+which has length 2.
+
+This is the shortest augmenting path in terms of number of edges and leads to
+faster convergence.
+
+\subsection*{Observation}
+
+Although both searches find valid augmenting paths, BFS consistently selects
+shorter paths, whereas DFS may choose longer and inefficient paths depending on
+the traversal order.
+\section*{Formal Justification (Edmonds--Karp Insight)}
+
+In the Edmonds--Karp algorithm:
+\begin{itemize}
+  \item BFS is used to find augmenting paths,
+  \item each BFS takes $O( O(E) )$ time,
+  \item the number of augmentations is $O(VE)$.
+\end{itemize}
+
+Hence, the total running time is:
+\[
+O(VE^2).
+\]
+
+This guarantee does not hold if DFS is used instead.
+
+\section*{Can DFS Ever Be Used?}
+
+Yes, DFS can be used:
+\begin{itemize}
+  \item in the basic Ford--Fulkerson algorithm,
+  \item for small graphs,
+  \item when capacities are integers and inputs are well-behaved.
+\end{itemize}
+
+However:
+\begin{itemize}
+  \item it offers no worst-case time guarantees,
+  \item it is unsuitable for large or adversarial inputs.
+\end{itemize}
+
+\section*{Relation to Ford--Fulkerson and Edmonds--Karp Algorithms}
+
+The choice between BFS and DFS directly distinguishes the
+Ford--Fulkerson and Edmonds--Karp algorithms.
+
+\subsection*{Ford--Fulkerson Method}
+
+The Ford--Fulkerson method allows augmenting paths to be found using
+\emph{any} graph traversal strategy, including DFS.
+
+As a result:
+\begin{itemize}
+  \item the algorithm is correct,
+  \item but the running time depends on the choice of augmenting paths,
+  \item and in the worst case, it may take exponential time.
+\end{itemize}
+
+\subsection*{Edmonds--Karp Algorithm}
+
+The Edmonds--Karp algorithm is a specific implementation of
+Ford--Fulkerson that uses BFS to find augmenting paths.
+
+By always selecting the shortest augmenting path:
+\begin{itemize}
+  \item the number of augmentations is bounded,
+  \item the distance from source to sink never decreases,
+  \item the algorithm runs in polynomial time.
+\end{itemize}
+
+Specifically, Edmonds--Karp runs in:
+\[
+O(VE^2)
+\]
+time.
+
+\subsection*{Key Distinction}
+
+Thus, while DFS can be used in Ford--Fulkerson, BFS is essential in
+Edmonds--Karp to guarantee efficiency and predictable performance.
+
+\section*{Final Conclusion}
+
+Breadth First Search (BFS) should be used to find augmenting paths.
+
+\textbf{Reasons:}
+\begin{itemize}
+  \item BFS finds the shortest augmenting paths,
+  \item guarantees polynomial-time performance,
+  \item prevents inefficient or cyclic augmentations,
+  \item forms the basis of the Edmonds--Karp algorithm.
+\end{itemize}
+\paragraph{Practical Consideration.}
+In practice, BFS-based augmenting path selection leads to more stable flow growth
+and fewer iterations, making it suitable for large networks.
+
+\section*{Intuition}
+
+Augmenting flow is like sending water through pipes. BFS finds the shortest route
+to the sink. Shorter routes fill faster and stabilize sooner, whereas DFS may
+wander unnecessarily and slow convergence.
+
+\end{document}

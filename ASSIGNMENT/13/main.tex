@@ -1,0 +1,283 @@
+\documentclass{article}
+
+% --------------------
+% Packages
+% --------------------
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+
+% --------------------
+% Page Layout
+% --------------------
+\geometry{
+  top=1in,
+  bottom=1in,
+  left=1in,
+  right=1in
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1em}
+
+% --------------------
+% Document
+% --------------------
+\begin{document}
+\vspace*{-1.5cm}
+
+% --------------------
+% Header Section
+% --------------------
+\hspace{0.7cm}
+\begin{minipage}[c]{0.7\textwidth}
+\vspace{0.5cm}
+\textbf{MTech CSE – 1st Semester} \\  
+Student ID: \textbf{A125023} \\  
+Student Name: \textbf{SRIJITA VERMA}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}{0.2\textwidth}
+\centering
+\includegraphics[width=0.6\linewidth]{college_logo.jpg}
+\end{minipage}
+
+\vspace{1cm}
+
+% --------------------
+% Question Section
+% --------------------
+\section*{Question}
+
+Is the \textsc{3-SAT} (3-CNF-SAT) problem NP-hard? Justify your answer.
+
+% --------------------
+% Answer Section
+% --------------------
+\section*{Answer}
+\section*{Short Answer}
+
+Yes, the \textsc{3-SAT} (3-CNF-SAT) problem is NP-hard.  
+In fact, \textsc{3-SAT} is NP-complete.
+
+\section*{Background and Definitions}
+
+\subsection*{Boolean Satisfiability (SAT)}
+
+The \textsc{SAT} problem asks whether a given Boolean formula has a truth
+assignment that makes the formula evaluate to \textsc{true}. \textsc{SAT} was the
+first problem proven to be NP-complete, as shown by the Cook--Levin Theorem.
+
+\subsection*{3-SAT (3-CNF-SAT)}
+
+In \textsc{3-SAT}, the Boolean formula is restricted to:
+\begin{itemize}
+  \item Conjunctive Normal Form (CNF), and
+  \item each clause contains exactly three literals.
+\end{itemize}
+
+Formally, a \textsc{3-SAT} formula has the form:
+\[
+\varphi = \bigwedge_{i=1}^{m}
+\left( \ell_{i1} \,\vee\, \ell_{i2} \,\vee\, \ell_{i3} \right),
+\]
+where each literal $\ell_{ij}$ is either a variable or its negation.
+
+\section*{Meaning of NP-Hardness}
+
+A problem $P$ is \emph{NP-hard} if every problem in $\mathbf{NP}$ can be reduced
+to $P$ in polynomial time. If a problem is both NP-hard and belongs to
+$\mathbf{NP}$, then it is \emph{NP-complete}.
+
+\section*{Membership of 3-SAT in NP}
+
+Given a truth assignment:
+\begin{itemize}
+  \item each clause can be checked in constant time,
+  \item all clauses can be checked in linear time.
+\end{itemize}
+
+Thus, a satisfying assignment is a polynomial-time verifiable certificate.
+Therefore,
+\[
+\textsc{3-SAT} \in \mathbf{NP}.
+\]
+
+\section*{Polynomial Reduction from SAT to 3-SAT}
+
+To establish NP-hardness, we show that:
+\[
+\textsc{SAT} \leq_p \textsc{3-SAT}.
+\]
+
+That is, any CNF formula can be transformed into an equivalent 3-CNF formula in
+polynomial time.
+
+\subsection*{Clause Transformation}
+
+Consider a CNF clause of arbitrary length:
+\[
+(x_1 \vee x_2 \vee x_3 \vee \cdots \vee x_k).
+\]
+
+This clause can be replaced by a conjunction of 3-literal clauses by introducing
+new variables:
+\[
+(x_1 \vee x_2 \vee y_1)
+\;\wedge\;
+(\neg y_1 \vee x_3 \vee y_2)
+\;\wedge\;
+\cdots
+\;\wedge\;
+(\neg y_{k-3} \vee x_{k-1} \vee x_k).
+\]
+
+This transformation satisfies the following properties:
+\begin{itemize}
+  \item satisfiability is preserved,
+  \item the number of new variables and clauses grows linearly,
+  \item the transformation runs in polynomial time.
+\end{itemize}
+
+\subsection*{Worked Reduction Example: SAT to 3-SAT}
+
+Consider the CNF formula:
+\[
+\varphi =
+(x_1 \vee x_2 \vee x_3 \vee x_4)
+\;\wedge\;
+(\neg x_1 \vee x_2)
+\;\wedge\;
+(x_3).
+\]
+
+This formula is in CNF, but not all clauses contain exactly three literals. We now
+convert it into an equivalent 3-CNF formula.
+
+\subsection*{Step 1: Handling Clauses with More Than Three Literals}
+
+The clause
+\[
+(x_1 \vee x_2 \vee x_3 \vee x_4)
+\]
+contains four literals. Introduce a new variable $y_1$ and rewrite it as:
+\[
+(x_1 \vee x_2 \vee y_1)
+\;\wedge\;
+(\neg y_1 \vee x_3 \vee x_4).
+\]
+
+This transformation preserves satisfiability:
+\begin{itemize}
+  \item if the original clause is satisfiable, the new clauses are satisfiable;
+  \item if the new clauses are satisfiable, at least one of the original literals
+  must be true.
+\end{itemize}
+
+\subsection*{Step 2: Handling Clauses with Fewer Than Three Literals}
+
+The clause
+\[
+(\neg x_1 \vee x_2)
+\]
+contains two literals. We duplicate one literal to obtain:
+\[
+(\neg x_1 \vee x_2 \vee x_2).
+\]
+
+This duplication does not change the logical meaning of the clause.
+
+\subsection*{Step 3: Handling Single-Literal Clauses}
+
+The clause
+\[
+(x_3)
+\]
+contains a single literal. We duplicate it to obtain:
+\[
+(x_3 \vee x_3 \vee x_3).
+\]
+
+Again, satisfiability is preserved.
+
+\subsection*{Step 4: Final 3-CNF Formula}
+
+The resulting 3-CNF formula is:
+\[
+\varphi' =
+(x_1 \vee x_2 \vee y_1)
+\;\wedge\;
+(\neg y_1 \vee x_3 \vee x_4)
+\;\wedge\;
+(\neg x_1 \vee x_2 \vee x_2)
+\;\wedge\;
+(x_3 \vee x_3 \vee x_3).
+\]
+
+The formula $\varphi'$ is satisfiable if and only if the original formula
+$\varphi$ is satisfiable.
+
+\subsection*{Step 5: Complexity of the Reduction}
+
+Each clause is transformed using a constant number of new variables and clauses.
+The total size of the formula increases linearly, and the transformation can be
+performed in polynomial time.
+
+Therefore,
+\[
+\textsc{SAT} \leq_p \textsc{3-SAT}.
+\]
+\section*{Consequence}
+
+Since:
+\begin{itemize}
+  \item \textsc{SAT} is NP-complete, and
+  \item \textsc{SAT} reduces to \textsc{3-SAT} in polynomial time,
+\end{itemize}
+we conclude that:
+\[
+\textsc{3-SAT} \text{ is NP-hard}.
+\]
+
+\section*{Final Classification}
+
+We have shown that:
+\[
+\textsc{3-SAT} \in \mathbf{NP}
+\quad \text{and} \quad
+\textsc{SAT} \leq_p \textsc{3-SAT}.
+\]
+
+Therefore,
+\[
+\textsc{3-SAT} \text{ is NP-complete},
+\]
+and hence NP-hard.
+
+\section*{Why This Result Is Important}
+
+The NP-hardness of \textsc{3-SAT} is fundamental because:
+\begin{itemize}
+  \item many NP-hardness proofs reduce from \textsc{3-SAT},
+  \item it serves as a standard starting point for reductions,
+  \item it shows that even very restricted Boolean formulas remain computationally hard.
+\end{itemize}
+
+Despite each clause having only three literals, the problem retains the full
+difficulty of \textsc{SAT}.
+
+\section*{Intuition}
+
+\textsc{SAT} is hard because it encodes arbitrary logical constraints. Restricting
+clauses to length three does not reduce expressive power; it only standardizes the
+structure. Thus, \textsc{3-SAT} captures the essence of NP-hardness in a highly
+controlled form.
+
+\section*{Final Remark}
+
+Although \textsc{3-SAT} is NP-hard, special cases such as \textsc{2-SAT} are
+solvable in polynomial time. This highlights how small syntactic restrictions can
+dramatically change computational complexity.
+
+\end{document}

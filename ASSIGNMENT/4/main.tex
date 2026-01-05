@@ -1,0 +1,553 @@
+\documentclass{article}
+
+% --------------------
+% Packages
+% --------------------
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+
+% --------------------
+% Page Layout
+% --------------------
+\geometry{
+  top=1in,
+  bottom=1in,
+  left=1in,
+  right=1in
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1em}
+
+% --------------------
+% Document
+% --------------------
+\begin{document}
+\vspace*{-1.5cm}
+
+% --------------------
+% Header Section
+% --------------------
+\hspace{0.7cm}
+\begin{minipage}[c]{0.7\textwidth}
+\vspace{0.5cm}
+\textbf{MTech CSE – 1st Semester} \\  
+Student ID: \textbf{A125023} \\  
+Student Name: \textbf{SRIJITA VERMA}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}{0.2\textwidth}
+\centering
+\includegraphics[width=0.6\linewidth]{college_logo.jpg}
+\end{minipage}
+
+\vspace{1cm}
+
+% --------------------
+% Question Section
+% --------------------
+\section*{Question}
+Explain the LU decomposition of a matrix using Gaussian Elimination. Clearly
+describe each step involved in the process.
+
+% --------------------
+% Answer Section
+% --------------------
+\section*{Answer}
+\section*{Introduction}
+
+LU decomposition is a fundamental matrix factorization technique in numerical
+linear algebra. It expresses a given square matrix $A$ as the product of two
+triangular matrices:
+\[
+A = LU
+\]
+where:
+\begin{itemize}
+  \item $L$ is a lower triangular matrix with unit diagonal entries,
+  \item $U$ is an upper triangular matrix.
+\end{itemize}
+
+LU decomposition is closely related to Gaussian elimination and is widely used
+for:
+\begin{itemize}
+  \item solving systems of linear equations,
+  \item computing matrix inverses,
+  \item efficient numerical computations involving multiple right-hand sides.
+\end{itemize}
+
+\section*{Preconditions for LU Decomposition}
+
+Let $A \in \mathbb{R}^{n \times n}$ be a square matrix.
+
+An LU decomposition without pivoting exists if:
+\begin{itemize}
+  \item all leading principal minors of $A$ are non-zero, or equivalently,
+  \item Gaussian elimination can be performed without requiring row exchanges.
+\end{itemize}
+
+If row exchanges are required, a permutation matrix $P$ is introduced, leading
+to:
+\[
+PA = LU.
+\]
+
+\section*{Relationship Between Gaussian Elimination and LU Decomposition}
+
+Gaussian elimination transforms a matrix $A$ into an upper triangular matrix $U$
+using a sequence of elementary row operations.
+
+LU decomposition captures this process algebraically by:
+\begin{itemize}
+  \item storing the elimination multipliers in the matrix $L$,
+  \item storing the final transformed matrix in $U$.
+\end{itemize}
+
+Thus, LU decomposition is Gaussian elimination written in matrix form.
+
+\section*{Step-by-Step Process of LU Decomposition Using Gaussian Elimination}
+
+\subsection*{Step 1: Start with the Original Matrix}
+
+Given:
+\[
+A =
+\begin{bmatrix}
+a_{11} & a_{12} & \cdots & a_{1n} \\
+a_{21} & a_{22} & \cdots & a_{2n} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{n1} & a_{n2} & \cdots & a_{nn}
+\end{bmatrix}
+\]
+
+We aim to eliminate entries below the diagonal column by column.
+
+\subsection*{Step 2: Perform Gaussian Elimination (First Column)}
+
+To eliminate the entries below $a_{11}$, we compute multipliers:
+\[
+m_{i1} = \frac{a_{i1}}{a_{11}}, \quad i = 2, 3, \ldots, n.
+\]
+
+Each row operation is:
+\[
+R_i \leftarrow R_i - m_{i1} R_1.
+\]
+
+After these operations:
+\begin{itemize}
+  \item All entries below $a_{11}$ become zero.
+  \item The matrix begins to take upper triangular form.
+\end{itemize}
+
+\subsection*{Step 3: Store Multipliers in Matrix $L$}
+
+The multipliers used in Gaussian elimination form the sub-diagonal entries of
+$L$.
+
+We define:
+\[
+L_{ii} = 1 \quad \text{for all } i,
+\]
+\[
+L_{i1} = m_{i1} \quad \text{for } i > 1.
+\]
+
+By convention, the diagonal entries of $L$ are set to $1$, making the LU
+factorization unique when no pivoting is used.
+
+Thus:
+\[
+L =
+\begin{bmatrix}
+1 & 0 & 0 & \cdots & 0 \\
+m_{21} & 1 & 0 & \cdots & 0 \\
+m_{31} & 0 & 1 & \cdots & 0 \\
+\vdots & \vdots & \vdots & \ddots & 0 \\
+m_{n1} & 0 & 0 & \cdots & 1
+\end{bmatrix}
+\]
+
+\subsection*{Step 4: Repeat for Subsequent Columns}
+
+For column $k$ $(k = 2, 3, \ldots, n-1)$, compute multipliers:
+\[
+m_{ik} = \frac{u_{ik}}{u_{kk}}, \quad i = k+1, \ldots, n.
+\]
+
+Apply row operations:
+\[
+R_i \leftarrow R_i - m_{ik} R_k.
+\]
+
+Store the multipliers in $L$:
+\[
+L_{ik} = m_{ik}.
+\]
+
+The updated matrix entries form the upper triangular matrix $U$.
+
+\subsection*{Step 5: Final Matrices $L$ and $U$}
+
+After completing elimination:
+\begin{itemize}
+  \item The resulting upper triangular matrix is $U$.
+  \item The stored multipliers form the lower triangular matrix $L$.
+\end{itemize}
+
+Thus:
+\[
+A = LU,
+\]
+where:
+\begin{itemize}
+  \item $L$ has ones on the diagonal and multipliers below it,
+  \item $U$ contains the diagonal and upper triangular entries.
+\end{itemize}
+
+\section*{Solving Linear Systems Using LU Decomposition}
+
+Once $A = LU$ is computed, the system
+\[
+Ax = b
+\]
+is solved in two stages:
+
+\begin{itemize}
+  \item \textbf{Forward substitution:} $Ly = b$,
+  \item \textbf{Backward substitution:} $Ux = y$.
+\end{itemize}
+
+This approach is computationally efficient, especially when solving for
+multiple right-hand sides.
+
+\section*{Illustrative Example}
+
+Let:
+\[
+A =
+\begin{bmatrix}
+2 & 3 \\
+4 & 7
+\end{bmatrix}
+\]
+
+Gaussian elimination gives the multiplier:
+\[
+m_{21} = \frac{4}{2} = 2.
+\]
+
+Thus:
+\[
+L =
+\begin{bmatrix}
+1 & 0 \\
+2 & 1
+\end{bmatrix},
+\quad
+U =
+\begin{bmatrix}
+2 & 3 \\
+0 & 1
+\end{bmatrix}.
+\]
+
+And indeed:
+\[
+LU =
+\begin{bmatrix}
+2 & 3 \\
+4 & 7
+\end{bmatrix}.
+\]
+
+\section*{Worked 3×3 Numerical Example}
+
+Consider the matrix:
+\[
+A =
+\begin{bmatrix}
+2 & 3 & 1 \\
+4 & 7 & 7 \\
+-2 & 4 & 5
+\end{bmatrix}
+\]
+
+We compute the LU decomposition of $A$ using Gaussian elimination without
+pivoting.
+
+\subsection*{Step 1: Eliminate entries below $a_{11}$}
+
+The multipliers are:
+\[
+m_{21} = \frac{4}{2} = 2, \quad
+m_{31} = \frac{-2}{2} = -1
+\]
+
+Applying row operations:
+\[
+R_2 \leftarrow R_2 - 2R_1, \quad
+R_3 \leftarrow R_3 + R_1
+\]
+
+This gives:
+\[
+U =
+\begin{bmatrix}
+2 & 3 & 1 \\
+0 & 1 & 5 \\
+0 & 7 & 6
+\end{bmatrix}
+\]
+
+\subsection*{Step 2: Eliminate entries below $u_{22}$}
+
+The multiplier is:
+\[
+m_{32} = \frac{7}{1} = 7
+\]
+
+Applying:
+\[
+R_3 \leftarrow R_3 - 7R_2
+\]
+
+We obtain:
+\[
+U =
+\begin{bmatrix}
+2 & 3 & 1 \\
+0 & 1 & 5 \\
+0 & 0 & -29
+\end{bmatrix}
+\]
+
+\subsection*{Step 3: Construct the $L$ matrix}
+
+The multipliers populate the lower triangular matrix:
+\[
+L =
+\begin{bmatrix}
+1 & 0 & 0 \\
+2 & 1 & 0 \\
+-1 & 7 & 1
+\end{bmatrix}
+\]
+
+Thus, the LU decomposition is:
+\[
+A = LU
+\]
+
+A direct multiplication verifies that this decomposition is correct.
+\section*{Computational Advantages of LU Decomposition}
+
+\begin{itemize}
+  \item Reduces repeated computation for multiple right-hand sides,
+  \item Improves numerical efficiency over repeated Gaussian elimination,
+  \item Forms the basis for many advanced numerical algorithms.
+\end{itemize}
+
+\section*{Limitations and Pivoting}
+
+If a pivot element $u_{kk} = 0$ (or very small), LU decomposition without
+modification fails.
+
+In such cases:
+\begin{itemize}
+  \item Partial pivoting is used,
+  \item The decomposition becomes $PA = LU$, where $P$ is a permutation matrix.
+\end{itemize}
+
+\section*{LU Decomposition with Partial Pivoting (PA = LU)}
+
+In practice, Gaussian elimination may encounter zero or very small pivot
+elements, leading to numerical instability or division by zero. To address this,
+\emph{partial pivoting} is employed.
+
+Partial pivoting involves rearranging the rows of the matrix so that, at each
+elimination step, the pivot element has the largest absolute value among the
+entries in the current column below the diagonal.
+
+\subsection*{Permutation Matrix}
+
+Row interchanges can be represented using a permutation matrix $P$. A
+permutation matrix is obtained by reordering the rows of the identity matrix.
+
+Applying the same row swaps to $A$ yields:
+\[
+PA
+\]
+
+\subsection*{PA = LU Decomposition}
+
+When pivoting is used, the matrix factorization takes the form:
+\[
+PA = LU
+\]
+where:
+\begin{itemize}
+  \item $P$ is a permutation matrix,
+  \item $L$ is a unit lower triangular matrix containing the elimination
+        multipliers,
+  \item $U$ is an upper triangular matrix.
+\end{itemize}
+
+\subsection*{Effect on Gaussian Elimination}
+
+The Gaussian elimination steps remain the same, except that:
+\begin{itemize}
+  \item Rows may be swapped before elimination at each stage,
+  \item The permutation matrix $P$ records these swaps,
+  \item The multipliers are stored in $L$ after row exchanges.
+\end{itemize}
+
+\subsection*{Solving Linear Systems with Pivoting}
+
+Given a system:
+\[
+Ax = b
+\]
+
+Using $PA = LU$, we solve:
+\[
+PAx = Pb
+\]
+
+This is done in three steps:
+\begin{enumerate}
+  \item Forward substitution: $Ly = Pb$
+  \item Backward substitution: $Ux = y$
+\end{enumerate}
+
+\subsection*{Importance of Partial Pivoting}
+
+Partial pivoting:
+\begin{itemize}
+  \item Improves numerical stability,
+  \item Prevents division by small or zero pivots,
+  \item Is used in most practical implementations of LU decomposition.
+\end{itemize}
+\section*{Worked 3×3 Numerical Example with Partial Pivoting}
+
+Consider the matrix:
+\[
+A =
+\begin{bmatrix}
+0 & 2 & 1 \\
+1 & -2 & -3 \\
+2 & 3 & 1
+\end{bmatrix}
+\]
+
+Direct LU decomposition without pivoting fails since the first pivot
+$a_{11} = 0$. Hence, partial pivoting is required.
+
+\subsection*{Step 1: Construct the Permutation Matrix}
+
+In the first column, the largest entry in absolute value is $2$ (row 3).
+We swap row 1 with row 3.
+
+The permutation matrix is:
+\[
+P =
+\begin{bmatrix}
+0 & 0 & 1 \\
+0 & 1 & 0 \\
+1 & 0 & 0
+\end{bmatrix}
+\]
+
+Applying the permutation:
+\[
+PA =
+\begin{bmatrix}
+2 & 3 & 1 \\
+1 & -2 & -3 \\
+0 & 2 & 1
+\end{bmatrix}
+\]
+
+\subsection*{Step 2: Gaussian Elimination on $PA$}
+
+Eliminate entries below the first pivot $2$.
+
+Multipliers:
+\[
+m_{21} = \frac{1}{2}, \quad
+m_{31} = 0
+\]
+
+Apply row operations:
+\[
+R_2 \leftarrow R_2 - \frac{1}{2}R_1
+\]
+
+This yields:
+\[
+\begin{bmatrix}
+2 & 3 & 1 \\
+0 & -\frac{7}{2} & -\frac{7}{2} \\
+0 & 2 & 1
+\end{bmatrix}
+\]
+
+\subsection*{Step 3: Second Pivot and Elimination}
+
+The second pivot is $-\frac{7}{2}$, which is nonzero. The multiplier is:
+\[
+m_{32} = \frac{2}{-\frac{7}{2}} = -\frac{4}{7}
+\]
+
+Apply:
+\[
+R_3 \leftarrow R_3 + \frac{4}{7} R_2
+\]
+
+Resulting in:
+\[
+U =
+\begin{bmatrix}
+2 & 3 & 1 \\
+0 & -\frac{7}{2} & -\frac{7}{2} \\
+0 & 0 & -1
+\end{bmatrix}
+\]
+
+\subsection*{Step 4: Construct the $L$ Matrix}
+
+The multipliers form the lower triangular matrix:
+\[
+L =
+\begin{bmatrix}
+1 & 0 & 0 \\
+\frac{1}{2} & 1 & 0 \\
+0 & -\frac{4}{7} & 1
+\end{bmatrix}
+\]
+
+Thus, the matrix admits the decomposition:
+\[
+PA = LU
+\]
+
+A direct multiplication verifies the correctness of this factorization.
+\subsection*{Remark}
+
+The computational cost of LU decomposition using Gaussian elimination is
+$O(n^3)$. However, once the factorization is computed, each additional system
+\[
+Ax = b
+\]
+can be solved in $O(n^2)$ time using forward and backward substitution.
+\section*{Conclusion}
+
+LU decomposition formalizes Gaussian elimination by separating it into a lower
+triangular matrix $L$ and an upper triangular matrix $U$. By recording
+elimination multipliers in $L$ and the transformed matrix in $U$, LU
+decomposition provides an efficient and structured approach to solving linear
+systems and performing numerical computations.
+
+\end{document}
