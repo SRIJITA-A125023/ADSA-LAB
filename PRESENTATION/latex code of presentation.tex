@@ -1,0 +1,1101 @@
+\documentclass[aspectratio=169]{beamer}
+\usetheme{Madrid}
+\usecolortheme{seahorse}
+\usepackage{tikz}
+\tikzset{
+    pptnode/.style={
+        draw=structure.fg,
+        fill=structure.fg!15,
+        very thick,
+        rounded corners,
+        minimum width=1cm,
+        inner sep=3pt
+    }
+}
+\usetikzlibrary{trees, shapes, positioning}
+\geometry{paperwidth=20cm, paperheight=12cm}
+\usepackage{xcolor}
+
+% Example — replace with your actual PPT theme colors
+\definecolor{pptBlue}{HTML}{1F4E79}
+\definecolor{pptOrange}{HTML}{ED7D31}
+\definecolor{pptGreen}{HTML}{70AD47}
+\definecolor{pptGray}{HTML}{A6A6A6}
+
+\institute [IIIT Bhubaneswar]{International Institute of Information Technology, Bhubaneswar}
+
+\title[2-3 Trees]{\textbf{2–3 Trees}} 
+\author[Nimrat and Srijita]{Nimrat Kaur (A125012) \\ Srijita Verma (A125023)}
+\date{}      % removes default date
+
+
+\begin{document}
+
+%-------------------------------------------------------
+\begin{frame}
+\titlepage
+\begin{center}
+December 3, 2025
+\end{center}
+\end{frame}
+
+%-------------------------------------------------------
+\begin{frame}{Outline}
+\begin{enumerate}
+    \item Introduction
+    \item Properties
+    \item 2-Node and 3-Node
+    \item 2-3 Tree vs Binary Tree
+    \item Height 
+    \item Searching
+    \item Insertion
+    \item Deletion
+    \item Complexities
+    \item Why 2--3 Trees Aren’t Used Directly
+    \item Conclusions
+    \item References
+\end{enumerate}
+\end{frame}
+
+
+%=======================================================
+\section{Introduction}
+
+\begin{frame}{Introduction}
+\begin{itemize}
+\item A 2–3 Tree is a type of self-balancing search tree used in computer science for efficient data storage and retrieval
+    \item In a 2–3 tree every node has:
+    \begin{itemize}
+        \item Either 1 key and 2 children (2-node), or
+        \item 2 keys and 3 children (3-node)
+    \end{itemize}
+    \item Leaf nodes are always at the \textbf{same level}, ensuring perfect balance.
+    \item They form the conceptual foundation for B-Trees, B+ Trees, and 2-3-4 Trees used in databases, file systems, and indexing structures.
+    \item They guarantee worst-case logarithmic height, making them useful in systems requiring deterministic performance.
+
+    
+\end{itemize}
+\end{frame}
+
+%=======================================================
+\section{Properties}
+
+\begin{frame}{Properties of 2–3 Trees}
+\begin{itemize}
+    \item Every internal node is either:
+    \begin{itemize}
+        \item \textbf{2-node}: 1 key, 2 children
+        \item \textbf{3-node}: 2 keys, 3 children
+    \end{itemize}
+    \item Keys are always stored in sorted order.
+    \item Each node contains one or two keys, including leaf nodes.
+    \item Operations supported are - \textbf{Searching, Insertion and Deletion}.
+    \item All leaves appear at the same level (strict height balance).
+    \item The height of the tree is logarithmic in the number of keys.
+\end{itemize}
+\end{frame}
+
+%=======================================================
+\section{2-Node and 3-Node}
+
+\begin{frame}{2-Node}
+
+\begin{itemize}
+    \item Contains one key.
+    \item It has two children.
+\end{itemize}
+\centering
+\begin{tikzpicture} [level distance=2.4cm, sibling distance=2.5cm]
+\node[draw, square][pptnode] {X}
+     child { node[pptnode][draw , square] {$<$X}}
+     child{ node[pptnode][draw, square] {$>$X}};
+\end{tikzpicture}
+\end{frame}
+
+\begin{frame}{3-Node}
+\begin{itemize}
+    \item Contains two keys.
+    \item It has three children.
+\end{itemize}
+
+\centering
+\begin{tikzpicture} [level distance=1.4cm, sibling distance=2.5cm]
+\node[draw, square, pptnode] {X \quad Y}
+     child { node[pptnode][draw , square] {$<$X}}
+     child{ node[pptnode][draw, square] {$>$X \quad $<$Y}}
+     child{ node[pptnode][draw, square] {$>$Y}};
+\end{tikzpicture}
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{2-3 Tree vs Binary Tree}
+
+\textbf{2-3 Tree}
+\begin{itemize}
+    \item Multiway tree (2 or 3 children).
+    \item Always height-balanced.
+    \item Operations take O(logn).
+    \item Uses splits and merges to maintain balance.
+\end{itemize}
+
+
+
+\textbf{Binary Tree}
+\begin{itemize}
+    \item Max 2 children.
+    \item Not guaranteed balanced.
+    \item Worst case O(n).
+    \item Needs rotations (AVL, Red-Black) for balancing.
+\end{itemize}
+    
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{2-3 Tree vs Binary Tree}
+
+\begin{tikzpicture}[
+  level 1/.style={sibling distance=3cm, level distance=1.4cm},
+  level 2/.style={sibling distance=1.7cm, level distance=1.2cm},
+  every node/.style={
+      draw,
+      rectangle,
+      rounded corners=6pt,
+      minimum width=18pt,
+      inner sep=4pt
+  }
+]
+
+\node[pptnode] {10}
+    child[draw=none] {}              % no left child
+    child {
+        node[pptnode] {20}
+            child[draw=none] {}
+            child {
+                node[pptnode] {30}
+                    child[draw=none] {}
+                    child {
+                        node[pptnode] {40}
+                            child[draw=none] {}
+                            child { node[pptnode] {50} }
+                    }
+            }
+    };
+
+
+
+\begin{scope}[xshift=13cm]
+
+\node[pptnode] {50}
+    child { node[pptnode] {30}
+        child {node[pptnode] {10\quad 20}}
+        child {node[pptnode] {40}}
+    }
+    child { node[pptnode] {90}
+        child{node[pptnode] {60 \qud 80}}
+        child{node[pptnode] {100}}
+    };
+
+\end{scope}
+\end{tikzpicture}
+\end{frame}
+%=======================================================
+\section{Height and Time Complexity}
+
+\begin{frame}{Height of 2–3 Tree}
+
+\textbf{Deriving the Height Bound}
+\begin{itemize}
+    \item Minimum branching (all 2-nodes): Leaves at height h= $2^h$
+    \item Maximum branching (all 3-nodes): Leaves at height h= $3^h$
+    \item Since the tree has n keys: \textit{$2^h$ \le n \le $3^h$ }  
+    \item Taking logs: $ \log_{3} n \le h \le \log_{2} n $ 
+    \item \textbf{Therefore:} h = $\Theta (\log n)$ 
+\end{itemize}
+\begin{itemize}
+    \item The Height of a 2–3 tree with n keys is: h = O(\log n)    
+    \item Because the tree always stays balanced.
+\end{itemize}
+
+
+\end{frame}
+
+%=======================================================
+\section{Searching}
+
+\begin{frame}{Searching in a 2–3 Tree}
+\begin{itemize}
+    \item \textbf{At a 2-node:}
+    \begin{itemize}
+        \item If X $=$ key → FOUND
+        \item If X $<$ key → go left
+        \item If X $>$ key → go right
+    \end{itemize}
+    \item \textbf{At a 3-node with keys K1 nad K2:}
+    \begin{itemize}
+        \item If X $=$ K1 or X $=$ K2 → FOUND
+        \item If X $<$ key → go left
+        \item If K1 $<$ X $<$ K2 → go middle
+        \item If X $>$ K2 → go right
+    \end{itemize}
+    \item \textbf{Time Complexity}
+    \begin{itemize}
+        \item Searching: \(O(\log n)\)
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Searching Example}
+\bigskip
+\begin{itemize}
+    \item Search 30
+    \item Found at the right child of 25.
+\end{itemize}
+
+\centering
+\begin{tikzpicture}[
+    level 1/.style={sibling distance=40mm},
+    level 2/.style={sibling distance=25mm},
+    level 3/.style={sibling distance=15mm},
+    level distance=15mm
+]
+
+\node[pptnode] {20 \; 40}
+    child { node[pptnode] {10}
+        child {node[pptnode] {5}}
+        child {node[pptnode] {15}}
+    }
+    child { node[pptnode] {25}
+        child{node[pptnode] {22}}
+        child{node[pptnode] {30}}
+    }
+    child { node[pptnode] {50}
+        child{node[pptnode] {45}}
+        child{node[pptnode] {56}}
+    };
+
+\end{tikzpicture}
+
+\end{frame}
+
+%=======================================================
+\section{Insertion}
+
+\begin{frame}
+\frametitle{Insertion Algorithm}
+\begin{itemize}
+    \item To insert an item I into a 2-3 tree, first locate the leaf at which the search for I would terminate.
+    \item Insert the new item I into the leaf.
+    \item  If the leaf now contains only two items, you are done. If the leaf contains three items, you must split it.
+    \item \textbf{Splitting a leaf}
+\end{itemize}
+
+\begin{tikzpicture} [level distance=1.4cm, sibling distance=2.5cm]
+\node[draw, square][pptnode] {P}
+     child { node[pptnode][draw , square] {S\quad M\quad L}}
+     child{ node[pptnode][draw, square] {}};
+
+% Arrow between trees
+\node[pptnode] at (4,-1.2) {\Large$\Rightarrow$};
+
+\begin{scope}[xshift=10cm]
+\node[draw, square][pptnode] {M\quad P}
+     child { node[pptnode][draw , square] {S}}
+     child{ node[pptnode][draw, square] {L}}
+     child{ node[pptnode][draw, square] {}};
+\end{scope}
+\end{tikzpicture}
+\end{frame}
+
+
+
+
+
+\begin{frame}
+\frametitle{Insertion Algorithm}
+\begin{tikzpicture} [level distance=1.4cm, sibling distance=2.5cm]
+\node[draw, square][pptnode] {P}
+     child { node[pptnode][draw , square] {}}
+     child{ node[pptnode][draw, square] {S\quad M \quad L}};
+
+% Arrow between trees
+\node[pptnode] at (4,-1.2) {\Large$\Rightarrow$};
+
+\begin{scope}[xshift=10cm]
+\node[draw, square][pptnode] {P\quad M}
+     child { node[pptnode][draw , square] {}}
+     child{ node[pptnode][draw, square] {S}}
+     child{ node[pptnode][draw, square] {L}};
+\end{scope}
+\end{tikzpicture}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Insertion Algorithm}
+\textbf{Splitting a root}
+
+\begin{tikzpicture}[
+  level 1/.style={sibling distance=2.5cm, level distance=1.4cm},
+  level 2/.style={sibling distance=1.3cm, level distance=1.2cm},
+  every node/.style={
+      draw,
+      rectangle,
+      rounded corners=6pt,
+      minimum width=18pt,
+      inner sep=4pt
+  }
+]
+
+% -------- Left Tree (Before Split) --------
+\node[pptnode] {S \quad M \quad L}
+    child {node[pptnode] {}}
+    child {node[pptnode] {}}
+    child {node[pptnode] {}}
+    child {node[pptnode] {}};
+
+% Arrow
+\node[pptnode] at (5.2,-1.2) {\Large$\Rightarrow$};
+
+% -------- Right Tree (After Split) --------
+\begin{scope}[xshift=9cm]
+\node[pptnode] {M}
+    child {
+        node[pptnode] {S}
+            child {node[pptnode] {}}
+            child {node[pptnode] {}}
+    }
+    child {
+        node[pptnode] {L}
+            child {node[pptnode] {}}
+            child {node[pptnode] {}}
+    };
+\end{scope}
+
+\end{tikzpicture}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Psuedo Code}
+\begin{itemize}
+\textit{ \item Search for the correct leaf where the key belongs.
+}
+\textit{ \item Insert the key into the leaf in sorted order.}
+\textit{ \item If the leaf now has 3 keys:}
+\begin{itemize}
+    \item Split it into two nodes.
+    \item Promote the middle key to the parent.
+\end{itemize}
+     \textit{ \item If the parent overflows,keep splitting upward.}
+     \textit{ \item If the root splits, create a new root.}
+\end{itemize}
+       
+\end{frame}
+
+
+
+
+
+
+\begin{frame}
+\frametitle{Insertion Example}
+Our Goal is to add the nodes- \textbf{39,38,37,36} in that order!
+
+\begin{tikzpicture}[
+  level 1/.style={sibling distance=4cm, level distance=1.4cm},
+  level 2/.style={sibling distance=1.5cm, level distance=1.2cm},
+  every node/.style={
+      draw,
+      rectangle,
+      rounded corners=6pt,
+      minimum width=18pt,
+      inner sep=4pt
+  }
+]
+
+% ---------- Tree 1 ----------
+\node[pptnode] {50}
+    child { node[pptnode] {30}
+        child { node[pptnode] {10\quad20} }
+        child { node[pptnode] {40} }
+    }
+    child { node[pptnode] {70\quad90}
+        child { node[pptnode] {60} }
+        child { node[pptnode] {80} }
+        child { node[pptnode] {100} }
+    };
+
+% Arrow between trees
+\node[pptnode] at (5,-1.2) {\Large$\Rightarrow$};
+
+% ---------- Tree 2 (moved rightwards) ----------
+\begin{scope}[xshift=12cm]
+\node[pptnode] {50}
+    child { node[pptnode] {30}
+        child { node[pptnode] {10\quad20} }
+        child { node[pptnode] {\textbf{39}\quad40} }
+    }
+    child { node[pptnode] {70\quad90}
+        child { node[pptnode] {60} }
+        child { node[pptnode] {80} }
+        child { node[pptnode] {100} }
+    };
+\end{scope}
+\end{tikzpicture}
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Insertion Example}
+
+\begin{tikzpicture}[
+  level 1/.style={sibling distance=5cm, level distance=1.4cm},
+  level 2/.style={sibling distance=2cm, level distance=1.2cm},
+  every node/.style={
+      draw,
+      rectangle,
+      rounded corners=6pt,
+      minimum width=18pt,
+      inner sep=4pt
+  }
+]
+
+
+\node[pptnode] {50}
+    child { node[pptnode] {30}
+        child { node[pptnode] {10\quad20} }
+        child { node[pptnode] {\textbf{38}\quad39\quad40} }
+    }
+    child { node[pptnode] {70\quad90}
+        child { node[pptnode] {60} }
+        child { node[pptnode] {80} }
+        child { node[pptnode] {100} }
+    };
+
+% Arrow between trees
+\node[pptnode] at (5,-1.2) {\Large$\Rightarrow$};
+The problem
+    
+\begin{scope}[xshift=10cm]
+The problem
+\node[draw, square, pptnode] {30}
+     child { node[pptnode][draw , square] {10\quad20}}
+     child{ node[pptnode][draw, square] {\textbf{38}\quad39\quad40}};
+\end{scope}
+\end{tikzpicture}
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Insertion Example}
+
+\begin{tikzpicture}[
+  level 1/.style={sibling distance=4cm, level distance=1.4cm},
+  level 2/.style={sibling distance=1.4cm, level distance=1.2cm},
+  every node/.style={
+      draw,
+      rectangle,
+      rounded corners=6pt,
+      minimum width=18pt,
+      inner sep=4pt
+  }
+]
+
+\node[draw, square, pptnode] {30\quad\textbf{39}}
+     child { node[pptnode][draw , square] {10\quad20}}
+     child{ node[pptnode][draw, square] {38}}
+     child{node[pptnode] {40}};
+
+
+% Arrow between trees
+\node[pptnode] at (6,-1.2) {\Large$\Rightarrow$};
+
+
+\begin{scope}[xshift=10cm]
+\node[pptnode] {50}
+    child { node[pptnode] {30\quad39}
+        child { node[pptnode] {10\quad20} }
+        child { node[pptnode] {\textbf{38}} }
+        child { node[pptnode] {40} }
+    }
+    child { node[pptnode] {70\quad90}
+        child { node[pptnode] {60} }
+        child { node[pptnode] {80} }
+        child { node[pptnode] {100} }
+    };
+
+
+\end{scope}
+\end{tikzpicture}
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Insertion Example}
+
+\begin{tikzpicture}[
+  level 1/.style={sibling distance=5cm, level distance=1.4cm},
+  level 2/.style={sibling distance=1.8cm, level distance=1.2cm},
+  every node/.style={
+      draw,
+      rectangle,
+      rounded corners=6pt,
+      minimum width=18pt,
+      inner sep=4pt
+  }
+]
+
+\node[pptnode] {50}
+    child { node[pptnode] {30\quad39}
+        child { node[pptnode] {10\quad20} }
+        child { node[pptnode] {\textbf{37}\quad 38} }
+        child { node[pptnode] {40} }
+    }
+    child { node[pptnode] {70\quad90}
+        child { node[pptnode] {60} }
+        child { node[pptnode] {80} }
+        child { node[pptnode] {100} }
+    };
+
+
+
+% Arrow between trees
+\node[pptnode] at (5,-1.2) {\Large$\Rightarrow$};
+
+\begin{scope}[xshift=10cm]
+
+\node[pptnode] {50}
+    child { node[pptnode] {30\quad39}
+        child { node[pptnode] {10\quad20} }
+        child { node[pptnode] {\textbf{36}\quad\textbf{37}\quad38} }
+        child { node[pptnode] {40} }
+    }
+    child { node[pptnode] {70\quad90}
+        child { node[pptnode] {60} }
+        child { node[pptnode] {80} }
+        child { node[pptnode] {100} }
+    };
+
+
+\end{scope}
+\end{tikzpicture}
+\end{frame}
+
+
+
+
+
+
+
+
+
+
+
+\begin{frame}
+\frametitle{Insertion Example}
+
+\begin{tikzpicture}[
+  level 1/.style={sibling distance=4.2cm, level distance=1.4cm},
+  level 2/.style={sibling distance=1.7cm, level distance=2.5cm},
+  every node/.style={
+      draw,
+      rectangle,
+      rounded corners=6pt,
+      minimum width=18pt,
+      inner sep=4pt
+  }
+]
+
+
+\node[draw, square, pptnode] {30\quad39}
+     child { node[pptnode][draw , square] {10\quad20}}
+     child{ node[pptnode][draw, square] {\textbf{36}\quad\textbf{37}\quad38}}
+     child{node[pptnode] {40}};
+
+
+% Arrow between trees
+\node[pptnode] at (6,-1.2) {\Large$\Rightarrow$};
+
+
+
+\begin{scope}[xshift=10cm]
+
+
+\node[pptnode] {50}
+    child { node[pptnode] {30\quad\textbf{37}\quad39}
+        child { node[pptnode] {10\quad20} }
+        child { node[pptnode] {36}}
+        child { node[pptnode] {38} }
+        child { node[pptnode] {40} }
+    };
+  
+\end{scope}
+\end{tikzpicture}
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Insertion Example}
+
+\begin{tikzpicture}[
+  level 1/.style={sibling distance=4cm, level distance=1.4cm},
+  level 2/.style={sibling distance=1.4cm, level distance=1.2cm},
+  every node/.style={
+      draw,
+      rectangle,
+      rounded corners=6pt,
+      minimum width=18pt,
+      inner sep=4pt
+  }
+]
+
+
+\node[pptnode] {\textbf{37}\quad50}
+    child { node[pptnode] {30}
+        child { node[pptnode] {10\quad20} }
+        child { node[pptnode] {36}}
+        }
+    child { node[pptnode] {39}
+        child { node[pptnode] {38} }
+        child { node[pptnode] {40} }
+    };
+
+% Arrow between trees
+\node[pptnode] at (4,-1.2) {\Large$\Rightarrow$};
+
+\begin{scope}[xshift=10cm]
+\node[pptnode] {37\quad50}
+    child { node[pptnode] {30}
+        child { node[pptnode] {10\quad20} }
+        child { node[pptnode] {36} }
+    }
+    child { node[pptnode] {39}
+        child { node[pptnode] {38} }
+        child { node[pptnode] {40} }
+    }
+    child{node[pptnode] {70\quad90}
+          child{node[pptnode] {60}} 
+          child{node[pptnode] {80}} 
+          child{node[pptnode] {100}} 
+          };
+\end{scope}
+
+
+\end{tikzpicture}
+\end{frame}
+
+
+
+
+%=======================================================
+\section{Deletion}
+
+\begin{frame}{Deletion in 2–3 Tree}
+\begin{itemize}
+    \item If the key is in an internal node:
+    \begin{itemize}
+        \item Replace it with its inorder predecessor or successor.
+    \end{itemize}
+    \item Delete the key from the leaf level.
+    \item If a node underflows (node becomes empty):
+    \begin{itemize}
+        \item Borrow a key from a sibling, or
+        \item Merge with a sibling and push the parent key down.
+    \end{itemize}
+    \item Underflow may propagate upward until the root is reached.
+    \item If the root becomes empty, its single child becomes the new root.
+    \item Time Complexity :  \(O(\log n)\)   
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Deletion Example}
+\centering
+\node  {Delete 70};
+
+\begin{tikzpicture}
+[
+  level 1/.style={sibling distance=4cm, level distance=1.4cm},
+  level 2/.style={sibling distance=1.4cm, level distance=1.2cm},
+  every node/.style={
+      draw,
+      rectangle,
+      rounded corners=6pt,
+      minimum width=18pt,
+      inner sep=4pt
+  }
+]
+
+\node[pptnode] {50}
+    child { node[pptnode] {30}
+        child { node[pptnode] {10\quad20} }
+        child { node[pptnode] {40} }
+    }
+    child { node[pptnode] {80\quad 90}
+        child { node[pptnode] {60} }
+        child { node[pptnode] {70} }
+        child { node[pptnode] {100} }
+    };
+
+
+\end{tikzpicture}
+
+Swap 70 with 80 (inorder successor)
+
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Deletion Example}
+\centering
+\begin{tikzpicture}[
+    node/.style={
+        draw,
+        ellipse,
+        minimum width=18pt,
+        minimum height=14pt,
+        inner sep=3pt
+    },
+    rect/.style={
+        draw,
+        rounded corners=6pt,
+        minimum width=35pt,
+        minimum height=16pt,
+        inner sep=3pt
+    }
+]
+
+% ---------------- (b) ----------------
+\node[rect][pptnode] (btop) at (0,0) {80 \quad 90};
+
+\node[node][pptnode] (b1) at (-1.2,-1.4) {60};
+\node[node][pptnode] (b2) at (0,-1.4) {$-$};
+\node[node][pptnode] (b3) at (1.2,-1.4) {100};
+
+\draw (btop) -- (b1);
+\draw (btop) -- (b2);
+\draw (btop) -- (b3);
+
+\node at (0,-2.3) {(a) Delete value from leaf};
+
+
+% ---------------- (c) ----------------
+\node[rect][pptnode] (ctop) at (5,0) {80 \quad 90};
+
+\node[node][pptnode] (c1) at (3.8,-1.4) {60};
+\node[node][pptnode] (c2) at (5,-1.4) {};  % empty circle
+\node[node][pptnode] (c3) at (6.2,-1.4) {100};
+
+\draw (ctop) -- (c1);
+\draw (ctop) -- (c2);
+\draw (ctop) -- (c3);
+
+% Cross sign on the empty node
+\draw (4.8,-1.6) -- (5.2,-1.2);
+\draw (4.8,-1.2) -- (5.2,-1.6);
+
+% Arrow pointing to the removed leaf
+\draw[<-, thick] (c1) -- (4.7,-1.4);
+
+\node at (5.8,-2.3) {(b) Merge nodes by deleting empty leaf};
+
+
+% ---------------- (d) ----------------
+\node[rect][pptnode] (dtop) at (10,0) {90};
+
+\node[rect][pptnode] (dchild) at (10,-1.4) {60 \quad 80};
+\node[node][pptnode] (dright) at (11.7,-1.4) {100};
+
+\draw (dtop) -- (dchild);
+\draw (dtop) -- (dright);
+
+% Dashed arrow showing movement of 80
+\draw[->, dashed, thick] (10,-0.1) -- (10,-1.1);
+
+\node at (11,-2.3) {(c) Move 80 downward};
+
+\end{tikzpicture}    
+\end{frame}
+%==========================================
+\begin{frame}
+\frametitle{Deletion Example}
+\centering
+\begin{tikzpicture}[
+    circ/.style={
+        draw,
+        circle,
+        minimum width=18pt,
+        inner sep=3pt,
+        text=black
+    },
+    leaf/.style={
+        draw,
+        rounded corners=6pt,
+        minimum width=35pt,
+        minimum height=16pt,
+        inner sep=3pt,
+        text=black
+    },
+    leafgray/.style={
+        draw,
+        rounded corners=6pt,
+        minimum width=35pt,
+        minimum height=16pt,
+        inner sep=3pt,
+        fill=gray!30,
+        text=black
+    },
+    circgray/.style={
+        draw,
+        circle,
+        fill=gray!30,
+        minimum width=18pt,
+        inner sep=3pt,
+        text=black
+    }
+]
+
+% ------------ Level 1 (root) ------------
+\node[circ][pptnode] (root) at (0,0) {50};
+
+% ------------ Level 2 ------------
+\node[circ][pptnode] (a) at (-2.2,-1.6) {30};
+\node[circgray][pptnode] (b) at (2.2,-1.6) {90};
+
+\draw (root) -- (a);
+\draw (root) -- (b);
+
+% ------------ Level 3 under 30 ------------
+\node[leaf][pptnode] (l1) at (-3.5,-3.2) {10 \quad 20};
+\node[circ][pptnode] (l2) at (-1,-3.2) {40};
+
+\draw (a) -- (l1);
+\draw (a) -- (l2);
+
+% ------------ Level 3 under 90 ------------
+\node[leafgray][pptnode] (r1) at (1,-3.2) {60 \quad 80};
+\node[circ][pptnode] (r2) at (3.5,-3.2) {100};
+
+\draw (b) -- (r1);
+\draw (b) -- (r2);
+
+% Label (e)
+\node at (-0.4,2) {Now delete 100};
+
+\end{tikzpicture}
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Deletion Example}
+\centering
+\begin{tikzpicture}[
+    small/.style={circle, draw, minimum size=8mm, inner sep=0pt, font=\footnotesize},
+    leaf/.style={rounded rectangle, draw, minimum height=8mm, minimum width=26mm, inner sep=2pt, font=\footnotesize},
+    arr/.style={-Stealth, thick},
+    dashedarr/.style={-Stealth, thick, dashed}
+]
+
+% ---------- (a) Delete value from leaf ----------
+\node[small][pptnode] (a90) at (0,2) {90};
+\node[leaf][pptnode] (aLeaf) at (-1,0) {60 \quad 80};
+% no extra node on the right anymore
+\draw (a90) -- (aLeaf);
+
+\node[align=center,font=\footnotesize] at (0,-1.2) {(a)\\Delete value from leaf};
+
+% ---------- (b) Doesn't work ----------
+\node[small][pptnode] (b90) at (4,2) {90};
+\node[small, fill=gray!20][pptnode] (b60) at (3,0) {60};
+\node[small, fill=gray!20][pptnode] (b80) at (5,0) {80};
+
+\draw (b90) -- (b60);
+\draw (b90) -- (b80);
+
+
+\node[align=center,font=\footnotesize] at (4,-1.2) {(b)\\Doesn't work};
+
+
+% ---------- (c) Redistribute ----------
+\node[small][pptnode] (c80) at (8,2) {80};
+\node[small][pptnode] (c60) at (7,0) {60};
+\node[small][pptnode] (c90) at (9,0) {90};
+\draw (c80) -- (c60);
+\draw (c80) -- (c90);
+
+\draw[dashedarr] (c60) .. controls (7.6,1.3) .. (c80);
+\draw[dashedarr] (c90) .. controls (8.4,1.3) .. (c80);
+
+\node[align=center,font=\footnotesize] at (8,-1.2) {(c)\\Redistribute};
+
+\end{tikzpicture}    
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Deletion Example}
+\centering
+\begin{tikzpicture}[
+    every node/.style={circle, draw, minimum size=9mm, inner sep=0pt, font=\small},
+    leaf/.style={rounded rectangle, draw, minimum height=8mm, minimum width=24mm, inner sep=2pt, font=\small},
+    shaded/.style={circle, draw, fill=gray!30, minimum size=9mm, inner sep=0pt, font=\small}
+]
+
+% Root
+\node (n50)[pptnode] at (0,3) {50};
+
+% Left subtree
+\node (n30)[pptnode] at (-2,1.5) {30};
+\node[leaf][pptnode] (n10_20) at (-3.2,0) {10 \quad 20};
+\node (n40)[pptnode] at (-1,0) {40};
+
+% Right subtree
+\node[shaded][pptnode] (n80) at (2,1.5) {80};
+\node[shaded][pptnode] (n60) at (1,0) {60};
+\node[shaded][pptnode] (n90) at (3,0) {90};
+
+% Draw edges
+\draw (n50) -- (n30);
+\draw (n50) -- (n80);
+
+\draw (n30) -- (n10_20);
+\draw (n30) -- (n40);
+
+\draw (n80) -- (n60);
+\draw (n80) -- (n90);
+
+
+\end{tikzpicture}    
+\end{frame}
+
+%=======================================================
+\begin{frame}{Complexities}
+
+%-------------------- Time Complexity --------------------%
+{\large \textbf{Time Complexity}}
+
+\begin{table}[]
+\centering
+\begin{tabular}{p{3cm} p{2.5cm} p{6.5cm}}
+\hline
+\textbf{Operation} & \textbf{Worst Case} & \textbf{Reason} \\
+\hline
+Search & $O(\log n)$ & Height is perfectly balanced. \\
+Insert & $O(\log n)$ & Only one root-to-leaf path is modified; splits propagate upward. \\
+Delete & $O(\log n)$ & Borrow/merge operations occur only along one path. \\
+\hline
+\end{tabular}
+\end{table}
+
+\vspace{0.5cm}
+
+%-------------------- Space Complexity --------------------%
+{\large \textbf{Space Complexity}}
+
+\begin{table}[]
+\centering
+\begin{tabular}{p{4cm} p{2.5cm} p{6cm}}
+\hline
+\textbf{Metric} & \textbf{Complexity} & \textbf{Reason} \\
+\hline
+Total Space & $O(n)$ & Each key stored exactly once; limited extra pointers. \\
+Node Space & $O(1)$ & Each node stores at most 2 keys and 3 pointers. \\
+\hline
+\end{tabular}
+\end{table}
+
+\end{frame}
+
+\begin{frame}{Why 2--3 Trees Aren’t Used Directly}
+
+\begin{itemize}
+    \item Nodes have a fixed branching factor (2 or 3), which is too small for disk-based storage.
+
+    \item B-Trees generalize the idea by storing many keys per node, sized to match disk blocks or cache lines.
+
+    \item The same balancing concepts---split, merge, promote---scale naturally to large nodes.
+
+    \item Larger nodes reduce:
+    \begin{itemize}
+        \item Disk seeks
+        \item Cache misses
+        \item Tree height
+    \end{itemize}
+
+    \item Because of this, real systems use B-Trees and B$^{+}$ Trees, not strict 2--3 Trees, even though the underlying principles are the same.
+\end{itemize}
+
+\end{frame}
+
+\section{Conclusion}
+
+\begin{frame}{Conclusion}
+\begin{itemize}
+    \item 2–3 Trees maintain strict height balance, ensuring search, insert, and delete always run in O(log n) time.
+    \item Splitting and merging during insertion and deletion preserve uniform depth across all leaves.
+    \item They provide a clean theoretical model for understanding multiway search trees.
+    \item Most importantly, they form the foundation for B-Trees and B+ Trees, which are widely used in databases, file systems, and indexing systems today.
+\end{itemize}
+\end{frame}
+
+%=======================================================
+\section{References}
+
+\begin{frame}{References}
+\begin{thebibliography}{9}
+
+\bibitem{CLRS}
+Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest, and Clifford Stein.
+\textit{Introduction to Algorithms}, 3rd ed.
+MIT Press, 2009.
+
+\bibitem{Weiss}
+Mark Allen Weiss.
+\textit{Data Structures and Algorithm Analysis in C++}, 4th ed.
+Pearson, 2013.
+
+\bibitem{Goodrich}
+Michael T. Goodrich, Roberto Tamassia, and Michael H. Goldwasser.
+\textit{Data Structures and Algorithms in Java}, 6th ed.
+Wiley, 2014.
+
+\bibitem{Knuth}
+Donald E. Knuth.
+\textit{The Art of Computer Programming, Volume 3: Sorting and Searching}.
+Addison-Wesley, 1998.
+
+\bibitem{Sedgewick}
+Robert Sedgewick and Kevin Wayne.
+\textit{Algorithms}, 4th ed.
+Addison-Wesley, 2011.
+
+\end{thebibliography}
+
+\end{frame}
+
+
+\begin{frame}{}
+  \centering
+  \vspace{2cm}
+  {\Huge \textbf{Thank You :)}}\\[1em]
+\end{frame}
+
+%=======================================================
+\end{document}
